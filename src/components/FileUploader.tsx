@@ -39,7 +39,7 @@ const FileUploader = ({ onDataParsed, isLoading }: FileUploaderProps) => {
         // Validate the parsed data
         const data = results.data as LogEntry[];
         
-        if (!data.length || !validateData(data[0] as Record<string, unknown>)) {
+        if (!data.length || !validateData(data[0])) {
           toast({
             title: "Invalid file format",
             description: "The file doesn't contain the expected columns: timestamp, message, logStreamName",
@@ -65,7 +65,7 @@ const FileUploader = ({ onDataParsed, isLoading }: FileUploaderProps) => {
     });
   };
 
-  const validateData = (entry: Record<string, unknown>) => {
+  const validateData = (entry: LogEntry) => {
     return typeof entry.timestamp !== 'undefined' && 
            typeof entry.message !== 'undefined' && 
            typeof entry.logStreamName !== 'undefined';

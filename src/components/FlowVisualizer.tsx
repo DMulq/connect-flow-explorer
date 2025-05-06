@@ -1,5 +1,5 @@
 
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import {
   ReactFlow,
   MiniMap,
@@ -60,49 +60,51 @@ const FlowVisualizer = ({ data }: FlowVisualizerProps) => {
   }, [edges, filteredNodes, selectedContactId]);
 
   return (
-    <ReactFlow
-      nodes={filteredNodes}
-      edges={filteredEdges}
-      onNodesChange={onNodesChange}
-      onEdgesChange={onEdgesChange}
-      nodeTypes={nodeTypes}
-      connectionLineType={ConnectionLineType.SmoothStep}
-      fitView
-      attributionPosition="bottom-right"
-    >
-      <Panel position="top-left" className="bg-background p-3 rounded-md shadow-md">
-        <div className="flex flex-col gap-2">
-          <div className="text-sm font-medium">Filter by Contact ID:</div>
-          <select
-            value={selectedContactId}
-            onChange={(e) => setSelectedContactId(e.target.value)}
-            className="bg-background border border-border rounded-md p-1 text-sm"
-          >
-            {contactIds.map((id) => (
-              <option key={id} value={id}>
-                {id === 'all' ? 'All Contacts' : id.substring(0, 8) + '...'}
-              </option>
-            ))}
-          </select>
-          
-          <Button
-            size="sm"
-            variant="outline"
-            className="mt-2"
-            onClick={() => {
-              setNodes(data.nodes);
-              setEdges(data.edges);
-            }}
-          >
-            Reset Layout
-          </Button>
-        </div>
-      </Panel>
-      
-      <Controls />
-      <MiniMap nodeStrokeWidth={3} />
-      <Background gap={16} color="#f1f1f1" />
-    </ReactFlow>
+    <div style={{ width: '100%', height: '100%' }}>
+      <ReactFlow
+        nodes={filteredNodes}
+        edges={filteredEdges}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        nodeTypes={nodeTypes}
+        connectionLineType={ConnectionLineType.SmoothStep}
+        fitView
+        attributionPosition="bottom-right"
+      >
+        <Panel position="top-left" className="bg-background p-3 rounded-md shadow-md">
+          <div className="flex flex-col gap-2">
+            <div className="text-sm font-medium">Filter by Contact ID:</div>
+            <select
+              value={selectedContactId}
+              onChange={(e) => setSelectedContactId(e.target.value)}
+              className="bg-background border border-border rounded-md p-1 text-sm"
+            >
+              {contactIds.map((id) => (
+                <option key={id} value={id}>
+                  {id === 'all' ? 'All Contacts' : id.substring(0, 8) + '...'}
+                </option>
+              ))}
+            </select>
+            
+            <Button
+              size="sm"
+              variant="outline"
+              className="mt-2"
+              onClick={() => {
+                setNodes(data.nodes);
+                setEdges(data.edges);
+              }}
+            >
+              Reset Layout
+            </Button>
+          </div>
+        </Panel>
+        
+        <Controls />
+        <MiniMap nodeStrokeWidth={3} />
+        <Background gap={16} color="#f1f1f1" />
+      </ReactFlow>
+    </div>
   );
 };
 
