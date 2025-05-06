@@ -8,9 +8,9 @@ interface ModuleNodeProps {
     label: string;
     moduleType?: string;
     flowName?: string;
-    parameters: Record<string, string>;
+    parameters: Record<string, any>; // Changed to any to handle different value types
     timestamp: string;
-    results?: string;
+    results?: any; // Changed to any to handle object results
   };
   isConnectable: boolean;
 }
@@ -29,10 +29,25 @@ const ModuleNode = ({ data, isConnectable }: ModuleNodeProps) => {
   const hasParameters = Object.keys(data.parameters).length > 0;
   
   // Check for error in results
-  const hasError = data.results && data.results.includes("Error");
+  const hasError = data.results && 
+    (typeof data.results === 'string' && data.results.includes("Error"));
   
   // If it's an error module, use a red background
   const nodeStyle = hasError ? "bg-red-500 text-white" : "";
+
+  // Format parameter value based on its type
+  const formatParameterValue = (value: any): string => {
+    if (value === null || value === undefined) return '';
+    if (typeof value === 'object') return JSON.stringify(value);
+    return String(value);
+  };
+
+  // Format results value based on its type
+  const formatResultsValue = (value: any): string => {
+    if (value === null || value === undefined) return '';
+    if (typeof value === 'object') return JSON.stringify(value);
+    return String(value);
+  };
 
   return (
     <div className={`node-content ${nodeStyle}`}>
@@ -62,7 +77,9 @@ const ModuleNode = ({ data, isConnectable }: ModuleNodeProps) => {
                 {Object.entries(data.parameters).map(([key, value]) => (
                   <div key={key} className="parameter-item text-xs">
                     <span className="font-medium">{key}:</span>
-                    <span className="ml-1 opacity-90 truncate">{value}</span>
+                    <span className="ml-1 opacity-90 truncate">
+                      {formatParameterValue(value)}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -73,7 +90,11 @@ const ModuleNode = ({ data, isConnectable }: ModuleNodeProps) => {
         {hasError && expanded && (
           <div className="mt-2 p-1 bg-red-600 border border-red-300 rounded-sm">
             <div className="text-xs font-medium text-white">Error:</div>
-            <div className="text-xs text-white">{data.results}</div>
+            <div className="text-xs text-white">
+              {typeof data.results === 'object' 
+                ? JSON.stringify(data.results)
+                : data.results}
+            </div>
           </div>
         )}
       </div>
