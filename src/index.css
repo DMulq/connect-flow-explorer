@@ -75,6 +75,13 @@
   body {
     @apply bg-background text-foreground;
   }
+  
+  /* Fix for React Flow container issue */
+  .react-flow-container, .react-flow {
+    width: 100% !important;
+    height: 100% !important;
+    position: relative;
+  }
 }
 
 /* React Flow Specific Styles */

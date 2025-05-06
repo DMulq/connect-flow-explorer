@@ -74,7 +74,7 @@ const Index = () => {
               </button>
             </div>
             
-            <div className="flex-1 border border-border rounded-lg overflow-hidden bg-muted/20" style={{ height: '70vh' }}>
+            <div className="flex-1 border border-border rounded-lg overflow-hidden bg-muted/20" style={{ height: '75vh' }}>
               <FlowVisualizer data={parsedData} />
             </div>
           </div>

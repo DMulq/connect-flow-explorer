@@ -1,5 +1,5 @@
 
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect, useRef } from 'react';
 import {
   ReactFlow,
   MiniMap,
@@ -30,10 +30,33 @@ const FlowVisualizer = ({ data }: FlowVisualizerProps) => {
   const [nodes, setNodes, onNodesChange] = useNodesState(data.nodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(data.edges);
   
+  // Container ref to get dimensions
+  const reactFlowWrapper = useRef<HTMLDivElement>(null);
+  
   // Filter options
   const [selectedContactId, setSelectedContactId] = useState<string>('all');
   
   const contactIds = useMemo(() => ['all', ...data.contactIds], [data.contactIds]);
+  
+  // Ensure unique IDs for nodes to prevent React Flow warnings
+  useEffect(() => {
+    if (data.nodes) {
+      // Ensure each node has a unique ID
+      const uniqueNodes = data.nodes.map((node, index) => {
+        if (node.id.includes('-') && node.data.contactId) {
+          // Make sure contactId is only used once in the node ID
+          return {
+            ...node,
+            id: node.id.includes(node.data.contactId) 
+              ? node.id 
+              : `${node.id}-${index}`
+          };
+        }
+        return node;
+      });
+      setNodes(uniqueNodes);
+    }
+  }, [data.nodes, setNodes]);
   
   const filteredNodes = useMemo(() => {
     if (selectedContactId === 'all') {
@@ -60,7 +83,7 @@ const FlowVisualizer = ({ data }: FlowVisualizerProps) => {
   }, [edges, filteredNodes, selectedContactId]);
 
   return (
-    <div style={{ width: '100%', height: '100%' }}>
+    <div ref={reactFlowWrapper} style={{ width: '100%', height: '100%', position: 'relative' }} className="react-flow-container">
       <ReactFlow
         nodes={filteredNodes}
         edges={filteredEdges}

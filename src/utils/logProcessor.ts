@@ -1,3 +1,4 @@
+
 import { LogEntry, LogMessage, ParsedLogData, FlowNode, FlowEdge } from "@/types/log";
 
 // Process raw log entries into structured data for visualization
@@ -21,6 +22,9 @@ export const processLogData = (entries: LogEntry[]): ParsedLogData => {
   let globalX = 100;
   const flowSpacing = 500;
   const moduleSpacing = 200;
+  
+  // Track created node IDs to ensure uniqueness
+  const createdNodeIds = new Set<string>();
   
   // Process each log entry
   sortedEntries.forEach((entry) => {
@@ -65,8 +69,18 @@ export const processLogData = (entries: LogEntry[]): ParsedLogData => {
       // Increment the module count for this flow
       flowPositions[message.ContactFlowId].moduleCount += 1;
       
+      // Create a unique module node ID
+      let moduleNodeId = `module-${message.Identifier}-${contactId}`;
+      
+      // If this ID was already created, make it unique
+      if (createdNodeIds.has(moduleNodeId)) {
+        moduleNodeId = `module-${message.Identifier}-${contactId}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      }
+      
+      // Add to created IDs set
+      createdNodeIds.add(moduleNodeId);
+      
       // Create module node
-      const moduleNodeId = `module-${message.Identifier}-${contactId}`;
       nodes.push({
         id: moduleNodeId,
         type: 'module',
