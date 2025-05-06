@@ -103,10 +103,12 @@ const ModuleNode = ({ data, isConnectable }: ModuleNodeProps) => {
           </div>
         )}
         
-        {hasError && (expanded || fullViewMode) && (
-          <div className="mt-2 p-1 bg-red-600 border border-red-300 rounded-sm">
-            <div className="text-xs font-medium text-white">Error:</div>
-            <div className={`text-xs text-white ${fullViewMode ? 'whitespace-normal break-words' : ''}`}>
+        {data.results && (expanded || fullViewMode) && (
+          <div className={`mt-2 p-1 ${hasError ? 'bg-red-600 border-red-300' : 'bg-gray-100 border-gray-300'} rounded-sm border`}>
+            <div className={`text-xs font-medium ${hasError ? 'text-white' : 'text-gray-800'}`}>
+              {hasError ? 'Error:' : 'Results:'}
+            </div>
+            <div className={`text-xs ${hasError ? 'text-white' : 'text-gray-800'} ${fullViewMode ? 'whitespace-normal break-words' : ''}`}>
               {typeof data.results === 'object' 
                 ? JSON.stringify(data.results)
                 : data.results}
