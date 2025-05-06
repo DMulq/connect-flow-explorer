@@ -39,7 +39,7 @@ const FileUploader = ({ onDataParsed, isLoading }: FileUploaderProps) => {
         // Validate the parsed data
         const data = results.data as LogEntry[];
         
-        if (!data.length || !validateData(data[0])) {
+        if (!data.length || !validateData(data[0] as Record<string, unknown>)) {
           toast({
             title: "Invalid file format",
             description: "The file doesn't contain the expected columns: timestamp, message, logStreamName",
