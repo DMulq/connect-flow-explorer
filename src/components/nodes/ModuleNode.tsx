@@ -17,9 +17,14 @@ interface ModuleNodeProps {
 
 const ModuleNode = ({ data, isConnectable }: ModuleNodeProps) => {
   const [expanded, setExpanded] = useState(false);
+  const [fullViewMode, setFullViewMode] = useState(false);
   
   const toggleExpand = () => {
     setExpanded(!expanded);
+  };
+  
+  const toggleFullView = () => {
+    setFullViewMode(!fullViewMode);
   };
   
   // Format timestamp if available
@@ -49,8 +54,10 @@ const ModuleNode = ({ data, isConnectable }: ModuleNodeProps) => {
     return String(value);
   };
 
+  const nodeClasses = `node-content ${nodeStyle} ${fullViewMode ? 'expanded-node' : ''}`;
+
   return (
-    <div className={`node-content ${nodeStyle}`}>
+    <div className={nodeClasses}>
       <Handle
         type="target"
         position={Position.Top}
@@ -58,26 +65,35 @@ const ModuleNode = ({ data, isConnectable }: ModuleNodeProps) => {
         style={{ background: '#fff', border: '1px solid #555' }}
       />
       
-      <div onClick={toggleExpand} className="cursor-pointer">
-        <div className="font-bold mb-1 flex items-center">
-          {data.label || 'Unknown Module'}
-          {hasError && <AlertTriangle className="ml-2 text-white h-4 w-4" />}
+      <div onClick={toggleFullView} className="cursor-pointer">
+        <div className="font-bold mb-1 flex items-center justify-between">
+          <div className="flex items-center">
+            {data.label || 'Unknown Module'}
+            {hasError && <AlertTriangle className="ml-2 text-white h-4 w-4" />}
+          </div>
+          {fullViewMode && <span className="text-xs">Click to minimize</span>}
         </div>
         <div className="text-xs opacity-80">{formattedTime}</div>
         
         {hasParameters && (
           <div className="mt-1">
-            <div className={`text-xs font-medium flex items-center justify-between ${hasError ? 'text-red-200' : ''}`}>
+            <div 
+              className={`text-xs font-medium flex items-center justify-between ${hasError ? 'text-red-200' : ''}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleExpand();
+              }}
+            >
               <span>Parameters</span>
               <span>{expanded ? '▲' : '▼'}</span>
             </div>
             
-            {expanded && (
-              <div className="parameter-list mt-1">
+            {(expanded || fullViewMode) && (
+              <div className={`parameter-list mt-1 ${fullViewMode ? 'expanded-parameter-list' : ''}`}>
                 {Object.entries(data.parameters).map(([key, value]) => (
                   <div key={key} className="parameter-item text-xs">
                     <span className="font-medium">{key}:</span>
-                    <span className="ml-1 opacity-90 truncate">
+                    <span className={`ml-1 opacity-90 ${fullViewMode ? '' : 'truncate'}`}>
                       {formatParameterValue(value)}
                     </span>
                   </div>
@@ -87,10 +103,10 @@ const ModuleNode = ({ data, isConnectable }: ModuleNodeProps) => {
           </div>
         )}
         
-        {hasError && expanded && (
+        {hasError && (expanded || fullViewMode) && (
           <div className="mt-2 p-1 bg-red-600 border border-red-300 rounded-sm">
             <div className="text-xs font-medium text-white">Error:</div>
-            <div className="text-xs text-white">
+            <div className={`text-xs text-white ${fullViewMode ? 'whitespace-normal break-words' : ''}`}>
               {typeof data.results === 'object' 
                 ? JSON.stringify(data.results)
                 : data.results}

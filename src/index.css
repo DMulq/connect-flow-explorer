@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -119,7 +120,7 @@
   font-size: 12px;
   text-align: left;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-  transition: none;
+  transition: all 0.2s ease;
 }
 
 .react-flow__node-contactflow {
@@ -138,6 +139,11 @@
   height: 100%;
 }
 
+.react-flow__node-module .node-content.expanded-node {
+  width: 350px;
+  z-index: 10;
+}
+
 .parameter-list {
   max-height: 80px;
   overflow-y: auto;
@@ -148,10 +154,20 @@
   margin-top: 4px;
 }
 
+.expanded-parameter-list {
+  max-height: none;
+  max-width: 330px;
+  overflow-wrap: break-word;
+  white-space: normal;
+}
+
 .parameter-item {
   display: flex;
-  justify-content: space-between;
   margin-bottom: 2px;
+}
+
+.expanded-node .parameter-item {
+  flex-direction: column;
 }
 
 /* Custom styles for edges */
