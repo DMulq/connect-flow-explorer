@@ -8,9 +8,9 @@ interface ModuleNodeProps {
     label: string;
     moduleType?: string;
     flowName?: string;
-    parameters: Record<string, any>; // Changed to any to handle different value types
+    parameters: Record<string, any>; 
     timestamp: string;
-    results?: any; // Changed to any to handle object results
+    results?: any;
   };
   isConnectable: boolean;
 }
@@ -93,7 +93,7 @@ const ModuleNode = ({ data, isConnectable }: ModuleNodeProps) => {
                 {Object.entries(data.parameters).map(([key, value]) => (
                   <div key={key} className="parameter-item text-xs">
                     <span className="font-medium">{key}:</span>
-                    <span className={`ml-1 opacity-90 ${fullViewMode ? '' : 'truncate'}`}>
+                    <span className={`ml-1 opacity-90 ${fullViewMode ? 'break-all' : 'truncate'}`}>
                       {formatParameterValue(value)}
                     </span>
                   </div>
@@ -108,7 +108,7 @@ const ModuleNode = ({ data, isConnectable }: ModuleNodeProps) => {
             <div className={`text-xs font-medium ${hasError ? 'text-white' : 'text-gray-800'}`}>
               {hasError ? 'Error:' : 'Results:'}
             </div>
-            <div className={`text-xs ${hasError ? 'text-white' : 'text-gray-800'} ${fullViewMode ? 'whitespace-normal break-words' : ''}`}>
+            <div className={`text-xs ${hasError ? 'text-white' : 'text-gray-800'} ${fullViewMode ? 'whitespace-normal break-all' : 'truncate'}`}>
               {typeof data.results === 'object' 
                 ? JSON.stringify(data.results)
                 : data.results}

@@ -141,7 +141,9 @@
 
 .react-flow__node-module .node-content.expanded-node {
   width: 350px;
+  max-width: 400px;
   z-index: 10;
+  overflow: visible;
 }
 
 .parameter-list {
@@ -164,10 +166,16 @@
 .parameter-item {
   display: flex;
   margin-bottom: 2px;
+  width: 100%;
 }
 
 .expanded-node .parameter-item {
   flex-direction: column;
+}
+
+.expanded-node .parameter-item span {
+  max-width: 100%;
+  word-wrap: break-word;
 }
 
 /* Custom styles for edges */
