@@ -31,10 +31,8 @@ const ModuleNode = ({ data, isConnectable }: ModuleNodeProps) => {
   // Check for error in results
   const hasError = data.results && data.results.includes("Error");
   
-  // Use a darker error styling with border to improve text contrast
-  const nodeStyle = hasError ? 
-    "shadow-[0_0_10px_rgba(239,68,68,0.7)] border border-red-300 bg-red-50" : 
-    "";
+  // If it's an error module, use a red background
+  const nodeStyle = hasError ? "bg-red-500 text-white" : "";
 
   return (
     <div className={`node-content ${nodeStyle}`}>
@@ -48,13 +46,13 @@ const ModuleNode = ({ data, isConnectable }: ModuleNodeProps) => {
       <div onClick={toggleExpand} className="cursor-pointer">
         <div className="font-bold mb-1 flex items-center">
           {data.label || 'Unknown Module'}
-          {hasError && <AlertTriangle className="ml-2 text-red-600 h-4 w-4" />}
+          {hasError && <AlertTriangle className="ml-2 text-white h-4 w-4" />}
         </div>
         <div className="text-xs opacity-80">{formattedTime}</div>
         
         {hasParameters && (
           <div className="mt-1">
-            <div className="text-xs font-medium flex items-center justify-between">
+            <div className={`text-xs font-medium flex items-center justify-between ${hasError ? 'text-red-200' : ''}`}>
               <span>Parameters</span>
               <span>{expanded ? '▲' : '▼'}</span>
             </div>
@@ -73,9 +71,9 @@ const ModuleNode = ({ data, isConnectable }: ModuleNodeProps) => {
         )}
         
         {hasError && expanded && (
-          <div className="mt-2 p-1 bg-red-50 border border-red-300 rounded-sm">
-            <div className="text-xs font-medium text-red-700">Error:</div>
-            <div className="text-xs text-red-600">{data.results}</div>
+          <div className="mt-2 p-1 bg-red-600 border border-red-300 rounded-sm">
+            <div className="text-xs font-medium text-white">Error:</div>
+            <div className="text-xs text-white">{data.results}</div>
           </div>
         )}
       </div>
