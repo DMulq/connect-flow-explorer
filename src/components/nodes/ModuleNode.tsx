@@ -1,6 +1,7 @@
 
 import React, { memo, useState } from 'react';
 import { Handle, Position } from '@xyflow/react';
+import { AlertTriangle } from 'lucide-react';
 
 interface ModuleNodeProps {
   data: {
@@ -30,9 +31,9 @@ const ModuleNode = ({ data, isConnectable }: ModuleNodeProps) => {
   // Check for error in results
   const hasError = data.results && data.results.includes("Error");
   
-  // Apply error styling if results indicate an error
+  // Use a darker error styling with border to improve text contrast
   const nodeStyle = hasError ? 
-    "border-2 border-red-600 bg-red-100" : 
+    "border-2 border-red-600 bg-red-50" : 
     "";
 
   return (
@@ -47,7 +48,7 @@ const ModuleNode = ({ data, isConnectable }: ModuleNodeProps) => {
       <div onClick={toggleExpand} className="cursor-pointer">
         <div className="font-bold mb-1 flex items-center">
           {data.label || 'Unknown Module'}
-          {hasError && <span className="ml-2 text-red-600 text-sm">⚠️</span>}
+          {hasError && <AlertTriangle className="ml-2 text-red-600 h-4 w-4" />}
         </div>
         <div className="text-xs opacity-80">{formattedTime}</div>
         
@@ -72,7 +73,7 @@ const ModuleNode = ({ data, isConnectable }: ModuleNodeProps) => {
         )}
         
         {hasError && expanded && (
-          <div className="mt-2 p-1 bg-red-100 border border-red-300 rounded-sm">
+          <div className="mt-2 p-1 bg-red-50 border border-red-300 rounded-sm">
             <div className="text-xs font-medium text-red-700">Error:</div>
             <div className="text-xs text-red-600">{data.results}</div>
           </div>
