@@ -1,8 +1,9 @@
-
 import { LogEntry, LogMessage, ParsedLogData, FlowNode, FlowEdge } from "@/types/log";
 
 // Process raw log entries into structured data for visualization
 export const processLogData = (entries: LogEntry[]): ParsedLogData => {
+  console.log("Processing log entries:", entries.length);
+  
   const nodes: FlowNode[] = [];
   const edges: FlowEdge[] = [];
   const contactFlows = new Map<string, string>();
@@ -69,16 +70,9 @@ export const processLogData = (entries: LogEntry[]): ParsedLogData => {
       // Increment the module count for this flow
       flowPositions[message.ContactFlowId].moduleCount += 1;
       
-      // Create a unique module node ID
-      let moduleNodeId = `module-${message.Identifier}-${contactId}`;
-      
-      // If this ID was already created, make it unique
-      if (createdNodeIds.has(moduleNodeId)) {
-        moduleNodeId = `module-${message.Identifier}-${contactId}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-      }
-      
-      // Add to created IDs set
-      createdNodeIds.add(moduleNodeId);
+      // Create a truly unique module node ID
+      const uniqueId = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+      const moduleNodeId = `module-${message.Identifier}-${contactId}-${uniqueId}`;
       
       // Create module node
       nodes.push({
@@ -126,6 +120,8 @@ export const processLogData = (entries: LogEntry[]): ParsedLogData => {
       console.error("Error processing log entry:", error);
     }
   });
+  
+  console.log("Processed into:", nodes.length, "nodes,", edges.length, "edges");
   
   return {
     nodes,

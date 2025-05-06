@@ -17,6 +17,7 @@ const Index = () => {
       
       // Process the log entries into a format suitable for visualization
       const data = processLogData(entries);
+      console.log("Processed data:", data);
       setParsedData(data);
     } catch (err) {
       console.error("Error processing log data:", err);
@@ -74,7 +75,7 @@ const Index = () => {
               </button>
             </div>
             
-            <div className="flex-1 border border-border rounded-lg overflow-hidden bg-muted/20" style={{ height: '75vh' }}>
+            <div className="flex-1 border border-border rounded-lg overflow-hidden bg-muted/20 react-flow-parent" style={{ height: '75vh' }}>
               <FlowVisualizer data={parsedData} />
             </div>
           </div>

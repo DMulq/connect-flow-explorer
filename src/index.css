@@ -82,6 +82,14 @@
     height: 100% !important;
     position: relative;
   }
+  
+  /* Ensure parent elements have proper height */
+  .react-flow-parent {
+    width: 100%;
+    height: 100%;
+    display: block;
+    position: relative;
+  }
 }
 
 /* React Flow Specific Styles */
