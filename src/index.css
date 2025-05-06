@@ -155,5 +155,10 @@
   margin-bottom: 2px;
 }
 
-@import '@xyflow/react/dist/style.css';
+/* Custom styles for edges */
+.react-flow__edge-path {
+  stroke-width: 2;
+  border-radius: 16px;
+}
 
+@import '@xyflow/react/dist/style.css';

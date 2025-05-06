@@ -14,6 +14,7 @@ import { ParsedLogData } from '@/types/log';
 import ContactFlowNode from './nodes/ContactFlowNode';
 import ModuleNode from './nodes/ModuleNode';
 import { Button } from '@/components/ui/button';
+import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 
 interface FlowVisualizerProps {
   data: ParsedLogData;
@@ -25,16 +26,30 @@ const nodeTypes = {
   module: ModuleNode,
 };
 
+// Define custom edge types and settings
+const defaultEdgeOptions = {
+  type: 'smoothstep',
+  style: {
+    strokeWidth: 2,
+    stroke: '#a78bfa',
+    borderRadius: 20,
+  },
+};
+
 const SimpleFlow = ({ data }: FlowVisualizerProps) => {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [selectedContactId, setSelectedContactId] = useState<string>('all');
+  const [multipleContactsDetected, setMultipleContactsDetected] = useState(false);
   
   // Initialize nodes and edges on component mount
   useEffect(() => {
     console.log("Setting up flow with:", data.nodes.length, "nodes and", data.edges.length, "edges");
     setNodes(data.nodes);
     setEdges(data.edges);
+    
+    // Check if multiple contacts are present
+    setMultipleContactsDetected(data.contactIds.length > 1);
   }, [data, setNodes, setEdges]);
 
   // Filter nodes based on selected contact ID
@@ -54,6 +69,15 @@ const SimpleFlow = ({ data }: FlowVisualizerProps) => {
   return (
     <div className="flow-container">
       <div className="flow-controls">
+        {multipleContactsDetected && (
+          <Alert variant="default" className="mb-3 bg-yellow-50 border-yellow-200">
+            <AlertTitle className="text-amber-600">Multiple Contact IDs Detected</AlertTitle>
+            <AlertDescription className="text-amber-600">
+              Although multiple contacts are supported, this works best with just one contact ID.
+            </AlertDescription>
+          </Alert>
+        )}
+        
         <div className="flex items-center gap-2 mb-2">
           <span className="text-sm font-medium">Filter Contact:</span>
           <select
@@ -89,6 +113,7 @@ const SimpleFlow = ({ data }: FlowVisualizerProps) => {
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           nodeTypes={nodeTypes}
+          defaultEdgeOptions={defaultEdgeOptions}
           fitView
           minZoom={0.1}
           maxZoom={1.5}

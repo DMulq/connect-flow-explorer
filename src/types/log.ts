@@ -41,6 +41,7 @@ export interface FlowEdge {
   source: string;
   target: string;
   animated: boolean;
+  type?: string;
   label?: string;
   style?: Record<string, string | number>;
 }

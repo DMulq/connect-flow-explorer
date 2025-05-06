@@ -1,3 +1,4 @@
+
 import { LogEntry, LogMessage, ParsedLogData, FlowNode, FlowEdge } from "@/types/log";
 
 // Process raw log entries into structured data for visualization
@@ -96,7 +97,13 @@ export const processLogData = (entries: LogEntry[]): ParsedLogData => {
         id: `edge-flow-${message.ContactFlowId}-${moduleNodeId}`,
         source: `flow-${message.ContactFlowId}`,
         target: moduleNodeId,
-        animated: false
+        animated: false,
+        type: 'step', // Use step type for orthogonal edges
+        style: { 
+          stroke: '#3b82f6', 
+          strokeWidth: 2,
+          borderRadius: 16
+        }
       });
       
       // Connect module to previous module if in same contact and flow
@@ -106,7 +113,12 @@ export const processLogData = (entries: LogEntry[]): ParsedLogData => {
           source: lastModuleByContact[contactId],
           target: moduleNodeId,
           animated: true,
-          style: { stroke: '#a78bfa' }
+          type: 'step', // Use step type for orthogonal edges
+          style: { 
+            stroke: '#a78bfa', 
+            strokeWidth: 2,
+            borderRadius: 16
+          }
         });
       }
       
