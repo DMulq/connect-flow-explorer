@@ -33,7 +33,7 @@ const ModuleNode = ({ data, isConnectable }: ModuleNodeProps) => {
   
   // Use a darker error styling with border to improve text contrast
   const nodeStyle = hasError ? 
-    "border-2 border-red-600 bg-red-50" : 
+    "shadow-[0_0_10px_rgba(239,68,68,0.7)] border border-red-300 bg-red-50" : 
     "";
 
   return (
