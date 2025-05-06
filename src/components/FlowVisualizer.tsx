@@ -1,15 +1,12 @@
 
-import React, { useMemo, useState, useEffect, useRef, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ReactFlow,
   MiniMap,
   Controls,
   Background,
-  Panel,
-  ConnectionLineType,
   useNodesState,
   useEdgesState,
-  ReactFlowProvider
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
@@ -22,82 +19,52 @@ interface FlowVisualizerProps {
   data: ParsedLogData;
 }
 
+// Define custom node types
 const nodeTypes = {
   contactflow: ContactFlowNode,
   module: ModuleNode,
 };
 
-const FlowVisualizerContent = ({ data }: FlowVisualizerProps) => {
+const SimpleFlow = ({ data }: FlowVisualizerProps) => {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-  
-  // Container ref to get dimensions
-  const reactFlowWrapper = useRef<HTMLDivElement>(null);
-  
-  // Filter options
   const [selectedContactId, setSelectedContactId] = useState<string>('all');
   
-  const contactIds = useMemo(() => ['all', ...data.contactIds], [data.contactIds]);
-  
-  // Initialize nodes and edges
+  // Initialize nodes and edges on component mount
   useEffect(() => {
-    console.log("Setting initial nodes and edges:", data.nodes.length, data.edges.length);
+    console.log("Setting up flow with:", data.nodes.length, "nodes and", data.edges.length, "edges");
     setNodes(data.nodes);
     setEdges(data.edges);
   }, [data, setNodes, setEdges]);
-  
-  const filteredNodes = useMemo(() => {
-    if (selectedContactId === 'all') {
-      return nodes;
-    }
-    
-    return nodes.filter(node => 
-      node.data.contactId === selectedContactId || 
-      node.type === 'contactflow'  // Always show flow nodes
-    );
-  }, [nodes, selectedContactId]);
-  
-  const filteredEdges = useMemo(() => {
-    if (selectedContactId === 'all') {
-      return edges;
-    }
-    
-    // Get filtered node IDs for edge filtering
-    const nodeIds = new Set(filteredNodes.map(node => node.id));
-    
-    return edges.filter(edge => 
-      nodeIds.has(edge.source) && nodeIds.has(edge.target)
-    );
-  }, [edges, filteredNodes, selectedContactId]);
 
-  const resetLayout = useCallback(() => {
-    console.log("Resetting layout with nodes:", data.nodes.length);
-    setNodes(data.nodes);
-    setEdges(data.edges);
-  }, [data, setNodes, setEdges]);
+  // Filter nodes based on selected contact ID
+  const filteredNodes = selectedContactId === 'all' 
+    ? nodes 
+    : nodes.filter(node => node.data.contactId === selectedContactId || node.type === 'contactflow');
+  
+  // Filter edges connected to visible nodes
+  const filteredEdges = selectedContactId === 'all' 
+    ? edges 
+    : edges.filter(edge => {
+        const sourceNode = filteredNodes.find(n => n.id === edge.source);
+        const targetNode = filteredNodes.find(n => n.id === edge.target);
+        return sourceNode && targetNode;
+      });
 
   return (
-    <ReactFlow
-      nodes={filteredNodes}
-      edges={filteredEdges}
-      onNodesChange={onNodesChange}
-      onEdgesChange={onEdgesChange}
-      nodeTypes={nodeTypes}
-      connectionLineType={ConnectionLineType.SmoothStep}
-      fitView
-      attributionPosition="bottom-right"
-    >
-      <Panel position="top-left" className="bg-background p-3 rounded-md shadow-md">
-        <div className="flex flex-col gap-2">
-          <div className="text-sm font-medium">Filter by Contact ID:</div>
+    <div className="flow-container">
+      <div className="flow-controls">
+        <div className="flex items-center gap-2 mb-2">
+          <span className="text-sm font-medium">Filter Contact:</span>
           <select
             value={selectedContactId}
             onChange={(e) => setSelectedContactId(e.target.value)}
             className="bg-background border border-border rounded-md p-1 text-sm"
           >
-            {contactIds.map((id) => (
+            <option value="all">All Contacts</option>
+            {data.contactIds.map((id) => (
               <option key={id} value={id}>
-                {id === 'all' ? 'All Contacts' : id.substring(0, 8) + '...'}
+                {id.substring(0, 8) + '...'}
               </option>
             ))}
           </select>
@@ -105,27 +72,41 @@ const FlowVisualizerContent = ({ data }: FlowVisualizerProps) => {
           <Button
             size="sm"
             variant="outline"
-            className="mt-2"
-            onClick={resetLayout}
+            onClick={() => {
+              setNodes(data.nodes);
+              setEdges(data.edges);
+            }}
           >
-            Reset Layout
+            Reset View
           </Button>
         </div>
-      </Panel>
+      </div>
       
-      <Controls />
-      <MiniMap nodeStrokeWidth={3} />
-      <Background gap={16} color="#f1f1f1" />
-    </ReactFlow>
+      <div className="flow-wrapper">
+        <ReactFlow
+          nodes={filteredNodes}
+          edges={filteredEdges}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+          nodeTypes={nodeTypes}
+          fitView
+          minZoom={0.1}
+          maxZoom={1.5}
+          defaultViewport={{ x: 0, y: 0, zoom: 0.5 }}
+        >
+          <Controls />
+          <MiniMap zoomable pannable />
+          <Background gap={16} color="#f1f1f1" />
+        </ReactFlow>
+      </div>
+    </div>
   );
 };
 
-const FlowVisualizer = (props: FlowVisualizerProps) => {
+const FlowVisualizer = ({ data }: FlowVisualizerProps) => {
   return (
-    <div style={{ width: '100%', height: '100%', position: 'relative' }}>
-      <ReactFlowProvider>
-        <FlowVisualizerContent {...props} />
-      </ReactFlowProvider>
+    <div className="h-full w-full">
+      <SimpleFlow data={data} />
     </div>
   );
 };

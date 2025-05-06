@@ -17,17 +17,20 @@ export const processLogData = (entries: LogEntry[]): ParsedLogData => {
   // Keep track of the last module for each contact flow to create edges
   const lastModuleByContact: Record<string, string> = {};
   
-  // Track the positions for each flow
-  const flowPositions: Record<string, { x: number, y: number, moduleCount: number }> = {};
+  // Simple horizontal layout
+  let flowX = 200;
+  const flowY = 100;
+  const flowSpacing = 400;
   
-  let globalX = 100;
-  const flowSpacing = 500;
-  const moduleSpacing = 200;
+  // Simple vertical layout for modules
+  const moduleSpacing = 100;
+  const moduleStartY = 200;
   
   // Track created node IDs to ensure uniqueness
   const createdNodeIds = new Set<string>();
+  const moduleIdCounter: Record<string, number> = {};
   
-  // Process each log entry
+  // Process each log entry to create nodes and edges
   sortedEntries.forEach((entry) => {
     try {
       // Parse the JSON message
@@ -39,47 +42,44 @@ export const processLogData = (entries: LogEntry[]): ParsedLogData => {
       if (!contactFlows.has(message.ContactFlowId)) {
         contactFlows.set(message.ContactFlowId, message.ContactFlowName);
         
-        // Set position for this flow
-        flowPositions[message.ContactFlowId] = { 
-          x: globalX, 
-          y: 100, 
-          moduleCount: 0 
-        };
-        
-        globalX += flowSpacing;
-        
-        // Add flow node
+        // Create flow node
         const flowNodeId = `flow-${message.ContactFlowId}`;
         nodes.push({
           id: flowNodeId,
           type: 'contactflow',
           data: {
-            label: message.ContactFlowName,
+            label: message.ContactFlowName || "Unnamed Flow",
             flowId: message.ContactFlowId,
             timestamp: message.Timestamp,
             parameters: {},
             contactId
           },
-          position: { 
-            x: flowPositions[message.ContactFlowId].x, 
-            y: flowPositions[message.ContactFlowId].y 
-          }
+          position: { x: flowX, y: flowY }
         });
+        
+        flowX += flowSpacing;
+        
+        // Initialize module counter for this flow
+        moduleIdCounter[message.ContactFlowId] = 0;
       }
       
-      // Increment the module count for this flow
-      flowPositions[message.ContactFlowId].moduleCount += 1;
+      // Increment module counter for this flow
+      moduleIdCounter[message.ContactFlowId]++;
       
       // Create a truly unique module node ID
-      const uniqueId = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
-      const moduleNodeId = `module-${message.Identifier}-${contactId}-${uniqueId}`;
+      const moduleCount = moduleIdCounter[message.ContactFlowId];
+      const moduleNodeId = `module-${message.Identifier}-${moduleCount}`;
+      
+      // Simple vertical positioning for modules
+      const moduleY = moduleStartY + (moduleCount * moduleSpacing);
+      const moduleX = flowX - flowSpacing; // Position under its flow
       
       // Create module node
       nodes.push({
         id: moduleNodeId,
         type: 'module',
         data: {
-          label: message.ContactFlowModuleType,
+          label: message.ContactFlowModuleType || "Unknown Module",
           moduleType: message.ContactFlowModuleType,
           flowName: message.ContactFlowName,
           flowId: message.ContactFlowId,
@@ -87,11 +87,7 @@ export const processLogData = (entries: LogEntry[]): ParsedLogData => {
           parameters: message.Parameters || {},
           contactId
         },
-        position: { 
-          x: flowPositions[message.ContactFlowId].x, 
-          y: flowPositions[message.ContactFlowId].y + 
-             (flowPositions[message.ContactFlowId].moduleCount * moduleSpacing) 
-        }
+        position: { x: moduleX, y: moduleY }
       });
       
       // Connect module to its flow
@@ -99,16 +95,18 @@ export const processLogData = (entries: LogEntry[]): ParsedLogData => {
         id: `edge-flow-${message.ContactFlowId}-${moduleNodeId}`,
         source: `flow-${message.ContactFlowId}`,
         target: moduleNodeId,
-        animated: false
+        animated: false,
+        type: 'smoothstep'
       });
       
-      // Connect module to previous module if in same contact
+      // Connect module to previous module if in same contact and flow
       if (lastModuleByContact[contactId]) {
         edges.push({
           id: `edge-${lastModuleByContact[contactId]}-${moduleNodeId}`,
           source: lastModuleByContact[contactId],
           target: moduleNodeId,
           animated: true,
+          type: 'smoothstep',
           style: { stroke: '#a78bfa' }
         });
       }

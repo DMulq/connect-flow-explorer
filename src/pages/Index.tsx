@@ -28,7 +28,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="h-screen flex flex-col bg-background">
       {/* Header */}
       <header className="border-b border-border">
         <div className="container mx-auto py-4">
@@ -75,7 +75,7 @@ const Index = () => {
               </button>
             </div>
             
-            <div className="flex-1 border border-border rounded-lg overflow-hidden bg-muted/20 react-flow-parent" style={{ height: '75vh' }}>
+            <div className="flex-1 border border-border rounded-lg overflow-hidden" style={{ height: '70vh' }}>
               <FlowVisualizer data={parsedData} />
             </div>
           </div>

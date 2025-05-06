@@ -20,7 +20,9 @@ const ModuleNode = ({ data, isConnectable }: ModuleNodeProps) => {
     setExpanded(!expanded);
   };
   
-  const formattedDate = new Date(data.timestamp).toLocaleTimeString();
+  // Format timestamp if available
+  const formattedTime = data.timestamp ? 
+    new Date(data.timestamp).toLocaleTimeString() : 'Unknown time';
   
   const hasParameters = Object.keys(data.parameters).length > 0;
 
@@ -30,25 +32,26 @@ const ModuleNode = ({ data, isConnectable }: ModuleNodeProps) => {
         type="target"
         position={Position.Top}
         isConnectable={isConnectable}
+        style={{ background: '#fff', border: '1px solid #555' }}
       />
       
       <div onClick={toggleExpand} className="cursor-pointer">
-        <div className="font-bold mb-1">{data.label}</div>
-        <div className="text-xs opacity-80">{formattedDate}</div>
+        <div className="font-bold mb-1">{data.label || 'Unknown Module'}</div>
+        <div className="text-xs opacity-80">{formattedTime}</div>
         
         {hasParameters && (
-          <div className="mt-2">
-            <div className="text-xs font-medium mb-1 flex items-center justify-between">
+          <div className="mt-1">
+            <div className="text-xs font-medium flex items-center justify-between">
               <span>Parameters</span>
-              <span className="opacity-70">{expanded ? '▲' : '▼'}</span>
+              <span>{expanded ? '▲' : '▼'}</span>
             </div>
             
             {expanded && (
-              <div className="parameter-list">
+              <div className="parameter-list mt-1">
                 {Object.entries(data.parameters).map(([key, value]) => (
                   <div key={key} className="parameter-item text-xs">
                     <span className="font-medium">{key}:</span>
-                    <span className="ml-1 truncate">{value}</span>
+                    <span className="ml-1 opacity-90 truncate">{value}</span>
                   </div>
                 ))}
               </div>
@@ -61,6 +64,7 @@ const ModuleNode = ({ data, isConnectable }: ModuleNodeProps) => {
         type="source"
         position={Position.Bottom}
         isConnectable={isConnectable}
+        style={{ background: '#fff', border: '1px solid #555' }}
       />
     </>
   );
