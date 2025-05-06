@@ -85,6 +85,7 @@ export const processLogData = (entries: LogEntry[]): ParsedLogData => {
           flowId: message.ContactFlowId,
           timestamp: message.Timestamp,
           parameters: message.Parameters || {},
+          results: message.Results, // Add results to detect errors
           contactId
         },
         position: { x: moduleX, y: moduleY }
@@ -95,8 +96,7 @@ export const processLogData = (entries: LogEntry[]): ParsedLogData => {
         id: `edge-flow-${message.ContactFlowId}-${moduleNodeId}`,
         source: `flow-${message.ContactFlowId}`,
         target: moduleNodeId,
-        animated: false,
-        type: 'smoothstep'
+        animated: false
       });
       
       // Connect module to previous module if in same contact and flow
@@ -106,7 +106,6 @@ export const processLogData = (entries: LogEntry[]): ParsedLogData => {
           source: lastModuleByContact[contactId],
           target: moduleNodeId,
           animated: true,
-          type: 'smoothstep',
           style: { stroke: '#a78bfa' }
         });
       }

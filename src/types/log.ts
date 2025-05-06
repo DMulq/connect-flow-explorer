@@ -30,6 +30,7 @@ export interface FlowNode {
     timestamp: string;
     parameters: Record<string, string>;
     contactId: string;
+    results?: string;
   };
   position: { x: number, y: number };
 }
