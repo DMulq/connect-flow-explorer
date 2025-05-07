@@ -1,4 +1,4 @@
-
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 @import '@xyflow/react/dist/style.css';
 
 @tailwind base;
@@ -7,35 +7,35 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 224 71% 4%;
+    --foreground: 213 31% 91%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 224 71% 6%;
+    --card-foreground: 213 31% 91%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 224 71% 4%;
+    --popover-foreground: 215 20.2% 65.1%;
 
-    --primary: 221 83% 53%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 210 100% 66%;
+    --primary-foreground: 222.2 47.4% 11.2%;
 
-    --secondary: 250 84% 70%;
+    --secondary: 266 100% 76%;
     --secondary-foreground: 210 40% 98%;
 
-    --accent: 250 95% 76%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 261 76% 65%;
+    --accent-foreground: 210 40% 98%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221 83% 53%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 48%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
   }
 
   .dark {
@@ -72,6 +72,7 @@
 @layer base {
   * {
     @apply border-border;
+    font-family: 'Poppins', sans-serif;
   }
 
   body {
@@ -87,6 +88,22 @@
   }
 }
 
+.text-gradient {
+  @apply bg-gradient-to-br from-foreground via-foreground/90 to-foreground/70 bg-clip-text text-transparent;
+}
+
+.text-gradient-primary {
+  @apply bg-gradient-to-br from-primary via-primary/90 to-secondary/90 bg-clip-text text-transparent;
+}
+
+.card-gradient {
+  @apply bg-gradient-to-br from-card to-muted/30 backdrop-blur-sm border border-border/50;
+}
+
+.glass-container {
+  @apply bg-card/40 backdrop-blur-md border border-white/5 shadow-xl;
+}
+
 /* Flow Container Styles */
 .flow-container {
   display: flex;
@@ -98,9 +115,10 @@
 
 .flow-controls {
   padding: 8px 16px;
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: rgba(20, 20, 30, 0.7);
   z-index: 5;
-  border-bottom: 1px solid #eaeaea;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
 }
 
 .dark .flow-controls {
@@ -122,23 +140,23 @@
 
 .react-flow__node {
   padding: 10px;
-  border-radius: 8px;
+  border-radius: 12px;
   width: 200px;
   font-size: 12px;
   text-align: left;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-  transition: all 0.2s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  transition: all 0.3s ease;
   z-index: 0;
 }
 
 .react-flow__node-contactflow {
-  background-color: #3b82f6;
+  background-color: hsl(var(--primary));
   color: white;
   font-weight: bold;
 }
 
 .react-flow__node-module {
-  background-color: #a78bfa;
+  background-color: hsl(var(--secondary));
   color: white;
 }
 
