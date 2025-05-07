@@ -86,7 +86,7 @@ const SimpleFlow = ({ data }: FlowVisualizerProps) => {
           <select
             value={selectedContactId}
             onChange={(e) => setSelectedContactId(e.target.value)}
-            className="bg-background border border-border rounded-md p-1 text-sm min-w-[280px]"
+            className="bg-background border border-border rounded-md p-1 text-sm min-w-[350px]"
           >
             <option value="all">All Contacts</option>
             {data.contactIds.map((id) => (

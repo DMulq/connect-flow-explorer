@@ -1,7 +1,7 @@
 
 import React, { memo, useState } from 'react';
 import { Handle, Position } from '@xyflow/react';
-import { AlertTriangle } from 'lucide-react';
+import { AlertTriangle, Speaker, Lambda } from 'lucide-react';
 
 interface ModuleNodeProps {
   data: {
@@ -40,6 +40,19 @@ const ModuleNode = ({ data, isConnectable }: ModuleNodeProps) => {
   // If it's an error module, use a red background
   const nodeStyle = hasError ? "bg-red-500 text-white" : "";
 
+  // Get module-specific icon
+  const getModuleIcon = () => {
+    const moduleName = data.label?.toLowerCase() || '';
+    
+    if (moduleName.includes('play prompt') || moduleName.includes('audio')) {
+      return <Speaker className="h-4 w-4" />;
+    } else if (moduleName.includes('lambda') || moduleName.includes('invoke')) {
+      return <Lambda className="h-4 w-4" />;
+    }
+    
+    return null;
+  };
+
   // Format parameter value based on its type
   const formatParameterValue = (value: any): string => {
     if (value === null || value === undefined) return '';
@@ -55,6 +68,7 @@ const ModuleNode = ({ data, isConnectable }: ModuleNodeProps) => {
   };
 
   const nodeClasses = `node-content ${nodeStyle} ${fullViewMode ? 'expanded-node' : ''}`;
+  const moduleIcon = getModuleIcon();
 
   return (
     <div className={nodeClasses}>
@@ -68,6 +82,7 @@ const ModuleNode = ({ data, isConnectable }: ModuleNodeProps) => {
       <div onClick={toggleFullView} className="cursor-pointer">
         <div className="font-bold mb-1 flex items-center justify-between">
           <div className="flex items-center">
+            {moduleIcon && <span className="mr-2">{moduleIcon}</span>}
             {data.label || 'Unknown Module'}
             {hasError && <AlertTriangle className="ml-2 text-white h-4 w-4" />}
           </div>
