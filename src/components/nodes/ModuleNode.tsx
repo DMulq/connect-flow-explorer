@@ -90,7 +90,7 @@ const ModuleNode = ({ data, isConnectable }: ModuleNodeProps) => {
           </div>
           {fullViewMode && (
             <span 
-              className="text-xs"
+              className="text-xs cursor-pointer hover:underline"
               onClick={toggleFullView}
             >Click to minimize</span>
           )}
@@ -100,7 +100,7 @@ const ModuleNode = ({ data, isConnectable }: ModuleNodeProps) => {
         {hasParameters && (
           <div className="mt-1">
             <div 
-              className={`text-xs font-medium flex items-center justify-between ${hasError ? 'text-red-200' : ''}`}
+              className={`text-xs font-medium flex items-center justify-between ${hasError ? 'text-red-200' : ''} cursor-pointer`}
               onClick={toggleExpand}
             >
               <span>Parameters</span>
@@ -127,7 +127,7 @@ const ModuleNode = ({ data, isConnectable }: ModuleNodeProps) => {
             <div className={`text-xs font-medium ${hasError ? 'text-white' : 'text-gray-800'}`}>
               {hasError ? 'Error:' : 'Results:'}
             </div>
-            <div className={`text-xs ${hasError ? 'text-white' : 'text-gray-800'} ${fullViewMode ? 'whitespace-normal break-all' : 'truncate'}`}>
+            <div className={`text-xs ${hasError ? 'text-white' : 'text-gray-800'} ${fullViewMode ? 'whitespace-normal break-all max-h-40 overflow-y-auto' : 'truncate'}`}>
               {formatResultsValue(data.results)}
             </div>
           </div>

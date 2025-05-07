@@ -143,6 +143,8 @@
 
 .react-flow__node-module .node-content.expanded-node {
   width: 450px;
+  height: auto;
+  min-height: 300px;
   max-width: 500px;
   z-index: 999;
   overflow: visible;
