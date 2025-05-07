@@ -69,12 +69,11 @@ const ModuleNode = ({ data, isConnectable }: ModuleNodeProps) => {
     return String(value);
   };
 
-  // Include a high z-index when in fullViewMode to ensure it appears on top of other nodes
   const nodeClasses = `node-content ${nodeStyle} ${fullViewMode ? 'expanded-node' : ''}`;
   const moduleIcon = getModuleIcon();
 
   return (
-    <div className={nodeClasses} style={fullViewMode ? { zIndex: 1000 } : {}}>
+    <div className={nodeClasses}>
       <Handle
         type="target"
         position={Position.Top}
