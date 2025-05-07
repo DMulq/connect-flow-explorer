@@ -144,13 +144,16 @@
 .react-flow__node-module .node-content.expanded-node {
   width: 450px;
   max-width: 500px;
-  z-index: 10;
+  z-index: 999;
   overflow: visible;
-  background-color: inherit;
+  background-color: #a78bfa;
   position: absolute;
   border-radius: 8px;
   padding: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  top: 0;
+  left: 0;
+  transform: translate(-25%, -10%);
 }
 
 .parameter-list {

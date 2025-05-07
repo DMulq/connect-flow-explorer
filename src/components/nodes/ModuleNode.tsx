@@ -19,11 +19,13 @@ const ModuleNode = ({ data, isConnectable }: ModuleNodeProps) => {
   const [expanded, setExpanded] = useState(false);
   const [fullViewMode, setFullViewMode] = useState(false);
   
-  const toggleExpand = () => {
+  const toggleExpand = (e: React.MouseEvent) => {
+    e.stopPropagation();
     setExpanded(!expanded);
   };
   
-  const toggleFullView = () => {
+  const toggleFullView = (e: React.MouseEvent) => {
+    e.stopPropagation();
     setFullViewMode(!fullViewMode);
   };
   
@@ -79,14 +81,19 @@ const ModuleNode = ({ data, isConnectable }: ModuleNodeProps) => {
         style={{ background: '#fff', border: '1px solid #555' }}
       />
       
-      <div onClick={toggleFullView} className="cursor-pointer">
+      <div className="cursor-pointer">
         <div className="font-bold mb-1 flex items-center justify-between">
           <div className="flex items-center">
             {moduleIcon && <span className="mr-2">{moduleIcon}</span>}
             {data.label || 'Unknown Module'}
             {hasError && <AlertTriangle className="ml-2 text-white h-4 w-4" />}
           </div>
-          {fullViewMode && <span className="text-xs">Click to minimize</span>}
+          {fullViewMode && (
+            <span 
+              className="text-xs"
+              onClick={toggleFullView}
+            >Click to minimize</span>
+          )}
         </div>
         <div className="text-xs opacity-80">{formattedTime}</div>
         
@@ -94,10 +101,7 @@ const ModuleNode = ({ data, isConnectable }: ModuleNodeProps) => {
           <div className="mt-1">
             <div 
               className={`text-xs font-medium flex items-center justify-between ${hasError ? 'text-red-200' : ''}`}
-              onClick={(e) => {
-                e.stopPropagation();
-                toggleExpand();
-              }}
+              onClick={toggleExpand}
             >
               <span>Parameters</span>
               <span>{expanded ? '▲' : '▼'}</span>
@@ -127,6 +131,15 @@ const ModuleNode = ({ data, isConnectable }: ModuleNodeProps) => {
               {formatResultsValue(data.results)}
             </div>
           </div>
+        )}
+
+        {!fullViewMode && (
+          <button
+            className="w-full text-xs mt-2 px-2 py-1 bg-white bg-opacity-10 hover:bg-opacity-20 rounded-sm transition-colors"
+            onClick={toggleFullView}
+          >
+            Expand
+          </button>
         )}
       </div>
       
