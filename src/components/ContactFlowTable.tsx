@@ -18,7 +18,7 @@ interface ContactFlowTableProps {
 }
 
 const ContactFlowTable = ({ data, nodes }: ContactFlowTableProps) => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   
   // Extract unique contact flows
   const contactFlows: Array<{ id: string; name: string }> = [];
