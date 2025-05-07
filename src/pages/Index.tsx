@@ -32,8 +32,7 @@ const Index = () => {
       {/* Header */}
       <header className="border-b border-border">
         <div className="container mx-auto py-4">
-          <h1 className="text-3xl font-bold">Connect Flow Explorer</h1>
-          <p className="text-muted-foreground">Visualize AWS Connect contact flows from log files</p>
+          {/* Title and description removed */}
         </div>
       </header>
 
@@ -85,7 +84,7 @@ const Index = () => {
       {/* Footer */}
       <footer className="border-t border-border py-4">
         <div className="container mx-auto text-center text-muted-foreground text-sm">
-          Connect Flow Explorer - Visualize AWS Connect contact flows
+          {/* Footer text removed */}
         </div>
       </footer>
     </div>
