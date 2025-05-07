@@ -1,4 +1,5 @@
 
+
 @import '@xyflow/react/dist/style.css';
 
 @tailwind base;
@@ -123,9 +124,8 @@
   text-align: left;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
   transition: all 0.2s ease;
-  /* Add significant margin to prevent node overlapping */
-  margin-bottom: 60px; /* Increased from 35px */
-  margin-right: 60px; /* Add horizontal margin */
+  /* Add margin to prevent node overlapping */
+  margin-bottom: 15px;
 }
 
 /* Increase the distance between nodes */
@@ -133,15 +133,14 @@
   background-color: #3b82f6;
   color: white;
   font-weight: bold;
-  margin-bottom: 80px; /* Increased from 45px */
+  margin-bottom: 25px; /* Additional space after contact flow node */
 }
 
 .react-flow__node-module {
   background-color: #a78bfa;
   color: white;
   /* Add margin between module nodes */
-  margin-bottom: 65px; /* Increased from 40px */
-  margin-right: 80px; /* Add horizontal spacing between nodes */
+  margin-bottom: 20px;
 }
 
 .react-flow__node-module .node-content {
@@ -255,44 +254,15 @@
 
 /* Increase space between connected nodes */
 .react-flow__handle {
-  width: 12px; /* Increased from 10px */
-  height: 12px; /* Increased from 10px */
+  width: 8px;
+  height: 8px;
 }
 
 .react-flow__handle-bottom {
-  bottom: -40px; /* Increased from -25px */
+  bottom: -15px; /* Move bottom handles further down */
 }
 
 .react-flow__handle-top {
-  top: -40px; /* Increased from -25px */
+  top: -15px; /* Move top handles further up */
 }
 
-/* Increase horizontal spacing for left/right handles */
-.react-flow__handle-left {
-  left: -15px; /* Add left handle offset */
-}
-
-.react-flow__handle-right {
-  right: -15px; /* Add right handle offset */
-}
-
-/* Increase vertical space between nodes by modifying edge path */
-.react-flow__edge {
-  --edge-path-y-offset: 50px; /* Increased from 30px */
-}
-
-/* Adjust the edge path to accommodate increased spacing */
-.react-flow__edge-smoothstep {
-  --edge-curvature: 0.8; /* Increased from 0.6 - creates more curved paths */
-}
-
-/* Additional spacing for flow layout */
-.react-flow__viewport {
-  padding: 100px; /* Add padding to viewport to create more space */
-}
-
-/* Update node layout to distribute horizontally */
-.react-flow__nodes {
-  display: flex;
-  flex-wrap: wrap;
-}
