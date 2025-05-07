@@ -1,4 +1,5 @@
 
+
 @import '@xyflow/react/dist/style.css';
 
 @tailwind base;
@@ -123,17 +124,23 @@
   text-align: left;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
   transition: all 0.2s ease;
+  /* Add margin to prevent node overlapping */
+  margin-bottom: 15px;
 }
 
+/* Increase the distance between nodes */
 .react-flow__node-contactflow {
   background-color: #3b82f6;
   color: white;
   font-weight: bold;
+  margin-bottom: 25px; /* Additional space after contact flow node */
 }
 
 .react-flow__node-module {
   background-color: #a78bfa;
   color: white;
+  /* Add margin between module nodes */
+  margin-bottom: 20px;
 }
 
 .react-flow__node-module .node-content {
@@ -244,3 +251,18 @@
   stroke-width: 2;
   border-radius: 16px;
 }
+
+/* Increase space between connected nodes */
+.react-flow__handle {
+  width: 8px;
+  height: 8px;
+}
+
+.react-flow__handle-bottom {
+  bottom: -15px; /* Move bottom handles further down */
+}
+
+.react-flow__handle-top {
+  top: -15px; /* Move top handles further up */
+}
+
