@@ -53,8 +53,7 @@ export const processLogData = (entries: LogEntry[]): ParsedLogData => {
             flowId: message.ContactFlowId,
             timestamp: message.Timestamp,
             parameters: {},
-            contactId,
-            depth: 0 // Add depth 0 for flow nodes
+            contactId
           },
           position: { x: flowX, y: flowY }
         });
@@ -88,8 +87,7 @@ export const processLogData = (entries: LogEntry[]): ParsedLogData => {
           timestamp: message.Timestamp,
           parameters: message.Parameters || {},
           results: message.Results, // Add results to detect errors
-          contactId,
-          depth: moduleCount // Add depth based on module count
+          contactId
         },
         position: { x: moduleX, y: moduleY }
       });

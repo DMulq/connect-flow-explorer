@@ -31,7 +31,6 @@ export interface FlowNode {
     parameters: Record<string, string>;
     contactId: string;
     results?: string;
-    depth?: number; // Added depth property
   };
   position: { x: number, y: number };
 }
