@@ -72,8 +72,11 @@ const ModuleNode = ({ data, isConnectable }: ModuleNodeProps) => {
   const nodeClasses = `node-content ${nodeStyle} ${fullViewMode ? 'expanded-node' : ''}`;
   const moduleIcon = getModuleIcon();
 
+  // Apply inline styles for z-index when in full view mode
+  const nodeStyleObj = fullViewMode ? { zIndex: 1000 } : {};
+
   return (
-    <div className={nodeClasses}>
+    <div className={nodeClasses} style={nodeStyleObj}>
       <Handle
         type="target"
         position={Position.Top}

@@ -121,6 +121,8 @@ const SimpleFlow = ({ data }: FlowVisualizerProps) => {
           minZoom={0.1}
           maxZoom={1.5}
           defaultViewport={{ x: 0, y: 0, zoom: 0.5 }}
+          nodesDraggable={true}
+          elementsSelectable={true}
         >
           <Controls />
           <MiniMap zoomable pannable nodeClassName={(node) => `node-${node.type}`} />
