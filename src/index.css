@@ -1,4 +1,6 @@
 
+@import '@xyflow/react/dist/style.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -237,5 +239,3 @@
   stroke-width: 2;
   border-radius: 16px;
 }
-
-@import '@xyflow/react/dist/style.css';

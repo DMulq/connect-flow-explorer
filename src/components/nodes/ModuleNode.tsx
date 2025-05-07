@@ -1,7 +1,7 @@
 
 import React, { memo, useState } from 'react';
 import { Handle, Position } from '@xyflow/react';
-import { AlertTriangle, Speaker, Lambda } from 'lucide-react';
+import { AlertTriangle, Speaker, Code } from 'lucide-react';
 
 interface ModuleNodeProps {
   data: {
@@ -47,7 +47,7 @@ const ModuleNode = ({ data, isConnectable }: ModuleNodeProps) => {
     if (moduleName.includes('play prompt') || moduleName.includes('audio')) {
       return <Speaker className="h-4 w-4" />;
     } else if (moduleName.includes('lambda') || moduleName.includes('invoke')) {
-      return <Lambda className="h-4 w-4" />;
+      return <Code className="h-4 w-4" />;
     }
     
     return null;
