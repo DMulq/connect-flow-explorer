@@ -56,14 +56,14 @@ const SimpleFlow = ({ data }: FlowVisualizerProps) => {
       
       // Calculate horizontal position based on module index and depth
       const horizontalOffset = ((index % 3) * 320); // Distribute nodes horizontally
-      const depthMultiplier = node.data.depth || 1;
+      const depthValue = node.data.depth !== undefined ? node.data.depth : 1;
       
       return {
         ...node,
         // Adjust position for better horizontal distribution
         position: {
           x: node.position.x + horizontalOffset,
-          y: node.position.y + (depthMultiplier * 100) // Increase vertical spacing based on depth
+          y: node.position.y + (depthValue * 100) // Increase vertical spacing based on depth
         }
       };
     });
