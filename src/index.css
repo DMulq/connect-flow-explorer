@@ -123,8 +123,9 @@
   text-align: left;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
   transition: all 0.2s ease;
-  /* Add margin to prevent node overlapping */
-  margin-bottom: 35px; /* Increased from 15px */
+  /* Add significant margin to prevent node overlapping */
+  margin-bottom: 60px; /* Increased from 35px */
+  margin-right: 60px; /* Add horizontal margin */
 }
 
 /* Increase the distance between nodes */
@@ -132,14 +133,15 @@
   background-color: #3b82f6;
   color: white;
   font-weight: bold;
-  margin-bottom: 45px; /* Increased from 25px */
+  margin-bottom: 80px; /* Increased from 45px */
 }
 
 .react-flow__node-module {
   background-color: #a78bfa;
   color: white;
   /* Add margin between module nodes */
-  margin-bottom: 40px; /* Increased from 20px */
+  margin-bottom: 65px; /* Increased from 40px */
+  margin-right: 80px; /* Add horizontal spacing between nodes */
 }
 
 .react-flow__node-module .node-content {
@@ -253,24 +255,44 @@
 
 /* Increase space between connected nodes */
 .react-flow__handle {
-  width: 10px; /* Increased from 8px */
-  height: 10px; /* Increased from 8px */
+  width: 12px; /* Increased from 10px */
+  height: 12px; /* Increased from 10px */
 }
 
 .react-flow__handle-bottom {
-  bottom: -25px; /* Increased from -15px */
+  bottom: -40px; /* Increased from -25px */
 }
 
 .react-flow__handle-top {
-  top: -25px; /* Increased from -15px */
+  top: -40px; /* Increased from -25px */
+}
+
+/* Increase horizontal spacing for left/right handles */
+.react-flow__handle-left {
+  left: -15px; /* Add left handle offset */
+}
+
+.react-flow__handle-right {
+  right: -15px; /* Add right handle offset */
 }
 
 /* Increase vertical space between nodes by modifying edge path */
 .react-flow__edge {
-  --edge-path-y-offset: 30px; /* Create a variable for edge path offset */
+  --edge-path-y-offset: 50px; /* Increased from 30px */
 }
 
 /* Adjust the edge path to accommodate increased spacing */
 .react-flow__edge-smoothstep {
-  --edge-curvature: 0.6; /* Higher values create more curved paths */
+  --edge-curvature: 0.8; /* Increased from 0.6 - creates more curved paths */
+}
+
+/* Additional spacing for flow layout */
+.react-flow__viewport {
+  padding: 100px; /* Add padding to viewport to create more space */
+}
+
+/* Update node layout to distribute horizontally */
+.react-flow__nodes {
+  display: flex;
+  flex-wrap: wrap;
 }
