@@ -4,7 +4,6 @@ import FileUploader from "@/components/FileUploader";
 import FlowVisualizer from "@/components/FlowVisualizer";
 import { LogEntry, ParsedLogData } from "@/types/log";
 import { processLogData } from "@/utils/logProcessor";
-import { ThemeToggle } from "@/components/ThemeToggle";
 
 const Index = () => {
   const [parsedData, setParsedData] = useState<ParsedLogData | null>(null);
@@ -34,7 +33,6 @@ const Index = () => {
       <header className="border-b border-border">
         <div className="container mx-auto py-4 flex justify-between items-center">
           <h1 className="text-xl font-bold">Contact Flow Visualizer</h1>
-          <ThemeToggle />
         </div>
       </header>
 
