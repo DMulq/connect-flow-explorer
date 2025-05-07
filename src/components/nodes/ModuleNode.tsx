@@ -109,9 +109,7 @@ const ModuleNode = ({ data, isConnectable }: ModuleNodeProps) => {
               {hasError ? 'Error:' : 'Results:'}
             </div>
             <div className={`text-xs ${hasError ? 'text-white' : 'text-gray-800'} ${fullViewMode ? 'whitespace-normal break-all' : 'truncate'}`}>
-              {typeof data.results === 'object' 
-                ? JSON.stringify(data.results)
-                : data.results}
+              {formatResultsValue(data.results)}
             </div>
           </div>
         )}

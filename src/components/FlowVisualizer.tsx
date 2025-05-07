@@ -15,6 +15,7 @@ import ContactFlowNode from './nodes/ContactFlowNode';
 import ModuleNode from './nodes/ModuleNode';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
+import ContactFlowTable from './ContactFlowTable';
 
 interface FlowVisualizerProps {
   data: ParsedLogData;
@@ -69,6 +70,8 @@ const SimpleFlow = ({ data }: FlowVisualizerProps) => {
   return (
     <div className="flow-container">
       <div className="flow-controls">
+        <ContactFlowTable data={data} nodes={nodes} />
+        
         {multipleContactsDetected && (
           <Alert variant="default" className="mb-3 bg-yellow-50 border-yellow-200">
             <AlertTitle className="text-amber-600">Multiple Contact IDs Detected</AlertTitle>
@@ -83,12 +86,12 @@ const SimpleFlow = ({ data }: FlowVisualizerProps) => {
           <select
             value={selectedContactId}
             onChange={(e) => setSelectedContactId(e.target.value)}
-            className="bg-background border border-border rounded-md p-1 text-sm"
+            className="bg-background border border-border rounded-md p-1 text-sm min-w-[280px]"
           >
             <option value="all">All Contacts</option>
             {data.contactIds.map((id) => (
               <option key={id} value={id}>
-                {id.substring(0, 8) + '...'}
+                {id}
               </option>
             ))}
           </select>
@@ -120,7 +123,7 @@ const SimpleFlow = ({ data }: FlowVisualizerProps) => {
           defaultViewport={{ x: 0, y: 0, zoom: 0.5 }}
         >
           <Controls />
-          <MiniMap zoomable pannable />
+          <MiniMap zoomable pannable nodeClassName={(node) => `node-${node.type}`} />
           <Background gap={16} color="#f1f1f1" />
         </ReactFlow>
       </div>
