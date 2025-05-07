@@ -4,6 +4,7 @@ import FileUploader from "@/components/FileUploader";
 import FlowVisualizer from "@/components/FlowVisualizer";
 import { LogEntry, ParsedLogData } from "@/types/log";
 import { processLogData } from "@/utils/logProcessor";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const Index = () => {
   const [parsedData, setParsedData] = useState<ParsedLogData | null>(null);
@@ -31,8 +32,9 @@ const Index = () => {
     <div className="h-screen flex flex-col bg-background">
       {/* Header */}
       <header className="border-b border-border">
-        <div className="container mx-auto py-4">
-          {/* Title and description removed */}
+        <div className="container mx-auto py-4 flex justify-between items-center">
+          <h1 className="text-xl font-bold">Contact Flow Visualizer</h1>
+          <ThemeToggle />
         </div>
       </header>
 
@@ -62,7 +64,6 @@ const Index = () => {
             <div className="mb-4 flex justify-between items-center">
               <div>
                 <h2 className="text-2xl font-bold">Contact Flow Visualization</h2>
-                {/* Removed the flow/blocks count here */}
               </div>
               <button 
                 onClick={() => setParsedData(null)} 
@@ -82,7 +83,7 @@ const Index = () => {
       {/* Footer */}
       <footer className="border-t border-border py-4">
         <div className="container mx-auto text-center text-muted-foreground text-sm">
-          {/* Footer text removed */}
+          <p>Contact Flow Visualizer</p>
         </div>
       </footer>
     </div>

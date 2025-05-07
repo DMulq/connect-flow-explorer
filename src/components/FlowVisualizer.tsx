@@ -16,6 +16,7 @@ import ModuleNode from './nodes/ModuleNode';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import ContactFlowTable from './ContactFlowTable';
+import { useTheme } from 'next-themes';
 
 interface FlowVisualizerProps {
   data: ParsedLogData;
@@ -42,6 +43,7 @@ const SimpleFlow = ({ data }: FlowVisualizerProps) => {
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [selectedContactId, setSelectedContactId] = useState<string>('all');
   const [multipleContactsDetected, setMultipleContactsDetected] = useState(false);
+  const { theme } = useTheme();
   
   // Initialize nodes and edges on component mount
   useEffect(() => {
@@ -73,9 +75,9 @@ const SimpleFlow = ({ data }: FlowVisualizerProps) => {
         <ContactFlowTable data={data} nodes={nodes} />
         
         {multipleContactsDetected && (
-          <Alert variant="default" className="mb-3 bg-yellow-50 border-yellow-200">
-            <AlertTitle className="text-amber-600">Multiple Contact IDs Detected</AlertTitle>
-            <AlertDescription className="text-amber-600">
+          <Alert variant="default" className="mb-3 bg-yellow-50 dark:bg-yellow-950/30 border-yellow-200 dark:border-yellow-900">
+            <AlertTitle className="text-amber-600 dark:text-amber-400">Multiple Contact IDs Detected</AlertTitle>
+            <AlertDescription className="text-amber-600 dark:text-amber-400">
               Although multiple contacts are supported, this works best with just one contact ID.
             </AlertDescription>
           </Alert>
@@ -124,7 +126,7 @@ const SimpleFlow = ({ data }: FlowVisualizerProps) => {
         >
           <Controls />
           <MiniMap zoomable pannable nodeClassName={(node) => `node-${node.type}`} />
-          <Background gap={16} color="#f1f1f1" />
+          <Background gap={16} color={theme === 'dark' ? '#333' : '#f1f1f1'} />
         </ReactFlow>
       </div>
     </div>
