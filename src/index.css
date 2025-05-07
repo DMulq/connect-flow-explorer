@@ -1,5 +1,4 @@
 
-
 @import '@xyflow/react/dist/style.css';
 
 @tailwind base;
@@ -125,7 +124,7 @@
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
   transition: all 0.2s ease;
   /* Add margin to prevent node overlapping */
-  margin-bottom: 15px;
+  margin-bottom: 35px; /* Increased from 15px */
 }
 
 /* Increase the distance between nodes */
@@ -133,14 +132,14 @@
   background-color: #3b82f6;
   color: white;
   font-weight: bold;
-  margin-bottom: 25px; /* Additional space after contact flow node */
+  margin-bottom: 45px; /* Increased from 25px */
 }
 
 .react-flow__node-module {
   background-color: #a78bfa;
   color: white;
   /* Add margin between module nodes */
-  margin-bottom: 20px;
+  margin-bottom: 40px; /* Increased from 20px */
 }
 
 .react-flow__node-module .node-content {
@@ -254,15 +253,24 @@
 
 /* Increase space between connected nodes */
 .react-flow__handle {
-  width: 8px;
-  height: 8px;
+  width: 10px; /* Increased from 8px */
+  height: 10px; /* Increased from 8px */
 }
 
 .react-flow__handle-bottom {
-  bottom: -15px; /* Move bottom handles further down */
+  bottom: -25px; /* Increased from -15px */
 }
 
 .react-flow__handle-top {
-  top: -15px; /* Move top handles further up */
+  top: -25px; /* Increased from -15px */
 }
 
+/* Increase vertical space between nodes by modifying edge path */
+.react-flow__edge {
+  --edge-path-y-offset: 30px; /* Create a variable for edge path offset */
+}
+
+/* Adjust the edge path to accommodate increased spacing */
+.react-flow__edge-smoothstep {
+  --edge-curvature: 0.6; /* Higher values create more curved paths */
+}
