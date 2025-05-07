@@ -38,6 +38,9 @@ const ContactFlowTable = ({ data, nodes }: ContactFlowTableProps) => {
       flowErrors.set(node.data.flowId, currentCount + 1);
     }
   });
+  
+  // Calculate total errors
+  const totalErrors = Array.from(flowErrors.values()).reduce((sum, count) => sum + count, 0);
 
   return (
     <div className="contact-flow-table rounded-md border mb-4 bg-white">
@@ -47,7 +50,7 @@ const ContactFlowTable = ({ data, nodes }: ContactFlowTableProps) => {
             <div className="flex items-center">
               <TableIcon className="h-4 w-4 mr-2" />
               <h3 className="font-medium text-sm">
-                Contact Flows ({contactFlows.length} flows, {nodes.length} blocks)
+                Contact Flows ({contactFlows.length} flows, {nodes.length} blocks, {totalErrors} errors)
               </h3>
             </div>
             <div>

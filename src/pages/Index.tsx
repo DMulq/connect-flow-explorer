@@ -62,9 +62,7 @@ const Index = () => {
             <div className="mb-4 flex justify-between items-center">
               <div>
                 <h2 className="text-2xl font-bold">Contact Flow Visualization</h2>
-                <p className="text-muted-foreground">
-                  {parsedData.contactFlows.size} flows, {parsedData.nodes.length} blocks
-                </p>
+                {/* Removed the flow/blocks count here */}
               </div>
               <button 
                 onClick={() => setParsedData(null)} 
