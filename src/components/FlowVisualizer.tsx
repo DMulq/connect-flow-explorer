@@ -56,16 +56,14 @@ const SimpleFlow = ({ data }: FlowVisualizerProps) => {
       
       // Calculate horizontal position based on module index and depth
       const horizontalOffset = ((index % 3) * 320); // Distribute nodes horizontally
-      
-      // Add significant vertical spacing between nodes (200px between each node)
-      const verticalSpacing = index * 200; 
+      const depthMultiplier = node.data.depth || 1;
       
       return {
         ...node,
-        // Adjust position for better distribution
+        // Adjust position for better horizontal distribution
         position: {
           x: node.position.x + horizontalOffset,
-          y: node.position.y + verticalSpacing // Significant vertical spacing
+          y: node.position.y + (depthMultiplier * 100) // Increase vertical spacing based on depth
         }
       };
     });
@@ -144,9 +142,9 @@ const SimpleFlow = ({ data }: FlowVisualizerProps) => {
           fitView
           minZoom={0.1}
           maxZoom={1.5}
-          defaultViewport={{ x: 0, y: 0, zoom: 0.3 }} // Further reduced zoom to show more of the flow
+          defaultViewport={{ x: 0, y: 0, zoom: 0.4 }} // Reduced zoom to show more of the flow
           fitViewOptions={{ 
-            padding: 0.3, // Increased padding around nodes when fitting view
+            padding: 0.2, // Add padding around nodes when fitting view
             includeHiddenNodes: false
           }}
           nodesDraggable={true}
