@@ -1,3 +1,4 @@
+
 @import '@xyflow/react/dist/style.css';
 
 @tailwind base;
@@ -122,9 +123,9 @@
   text-align: left;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
   transition: all 0.2s ease;
-  /* Even more significant spacing between nodes */
-  margin-bottom: 120px; /* Increased from 60px */
-  margin-right: 60px;
+  /* Add significant margin to prevent node overlapping */
+  margin-bottom: 60px; /* Increased from 35px */
+  margin-right: 60px; /* Add horizontal margin */
 }
 
 /* Increase the distance between nodes */
@@ -132,15 +133,15 @@
   background-color: #3b82f6;
   color: white;
   font-weight: bold;
-  margin-bottom: 160px; /* Increased from 80px */
+  margin-bottom: 80px; /* Increased from 45px */
 }
 
 .react-flow__node-module {
   background-color: #a78bfa;
   color: white;
-  /* Add significant margin between module nodes */
-  margin-bottom: 140px; /* Increased from 65px */
-  margin-right: 80px;
+  /* Add margin between module nodes */
+  margin-bottom: 65px; /* Increased from 40px */
+  margin-right: 80px; /* Add horizontal spacing between nodes */
 }
 
 .react-flow__node-module .node-content {
@@ -254,57 +255,44 @@
 
 /* Increase space between connected nodes */
 .react-flow__handle {
-  width: 14px; /* Increased from 12px */
-  height: 14px; /* Increased from 12px */
+  width: 12px; /* Increased from 10px */
+  height: 12px; /* Increased from 10px */
 }
 
 .react-flow__handle-bottom {
-  bottom: -80px; /* Increased from -40px */
+  bottom: -40px; /* Increased from -25px */
 }
 
 .react-flow__handle-top {
-  top: -80px; /* Increased from -40px */
+  top: -40px; /* Increased from -25px */
 }
 
 /* Increase horizontal spacing for left/right handles */
 .react-flow__handle-left {
-  left: -20px; /* Increased from -15px */
+  left: -15px; /* Add left handle offset */
 }
 
 .react-flow__handle-right {
-  right: -20px; /* Increased from -15px */
+  right: -15px; /* Add right handle offset */
 }
 
 /* Increase vertical space between nodes by modifying edge path */
 .react-flow__edge {
-  --edge-path-y-offset: 100px; /* Increased from 50px */
+  --edge-path-y-offset: 50px; /* Increased from 30px */
 }
 
 /* Adjust the edge path to accommodate increased spacing */
 .react-flow__edge-smoothstep {
-  --edge-curvature: 0.9; /* Increased from 0.8 */
+  --edge-curvature: 0.8; /* Increased from 0.6 - creates more curved paths */
 }
 
 /* Additional spacing for flow layout */
 .react-flow__viewport {
-  padding: 150px; /* Increased padding from 100px */
+  padding: 100px; /* Add padding to viewport to create more space */
 }
 
-/* Update node layout to distribute horizontally and vertically */
+/* Update node layout to distribute horizontally */
 .react-flow__nodes {
   display: flex;
   flex-wrap: wrap;
-  gap: 100px; /* Added explicit gap between nodes */
-}
-
-/* Minimap Styles */
-.react-flow__minimap {
-  width: 100px;
-  height: 100px;
-  background-color: #333;
-  border-radius: 50%;
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 1000;
 }
