@@ -11,7 +11,9 @@ import {
   Node,
   Edge,
   NodeProps,
-  ReactFlowInstance
+  ReactFlowInstance,
+  Position,
+  OnInit,
 } from '@xyflow/react';
 import dagre from '@dagrejs/dagre';
 import { toPng } from 'html-to-image';
@@ -50,8 +52,8 @@ const getLayoutedElements = (
 
   nodes.forEach((node) => {
     const nodeWithPosition = dagreGraph.node(node.id);
-    node.targetPosition = direction === 'TB' ? 'top' : 'left';
-    node.sourcePosition = direction === 'TB' ? 'bottom' : 'right';
+    node.targetPosition = direction === 'TB' ? Position.Top : Position.Left;
+    node.sourcePosition = direction === 'TB' ? Position.Bottom : Position.Right;
 
     // We are shifting the dagre node position (defined center) to the top left
     // so it matches the React Flow node anchor point
@@ -124,8 +126,8 @@ const FlowVisualizer: React.FC<FlowVisualizerProps> = ({ data }) => {
     const initialNodes: Node[] = data.nodes.map((node) => ({
       id: node.id,
       data: { 
-        label: node.name || node.id, 
-        parameters: node.parameters || {} 
+        label: node.data.label || node.id, 
+        parameters: node.data.parameters || {} 
       },
       position: { x: 0, y: 0 },
       type: node.type === 'module' ? 'module' : 'contactflow',
@@ -174,6 +176,13 @@ const FlowVisualizer: React.FC<FlowVisualizerProps> = ({ data }) => {
     [setEdges]
   );
 
+  const onInit: OnInit = useCallback(
+    (instance: ReactFlowInstance) => {
+      setReactFlowInstance(instance);
+    },
+    []
+  );
+
   return (
     <div className="flow-container">
       <div className="flow-controls flex justify-between items-center">
@@ -199,7 +208,7 @@ const FlowVisualizer: React.FC<FlowVisualizerProps> = ({ data }) => {
             minZoom={0.1}
             maxZoom={1.5}
             defaultViewport={{ x: 0, y: 0, zoom: 0.5 }}
-            onInit={setReactFlowInstance}
+            onInit={onInit}
             proOptions={{ hideAttribution: true }}
           >
             <Controls className="react-flow__controls" />
