@@ -1,27 +1,25 @@
+
 import React, { useState, useEffect, useCallback } from 'react';
-import ReactFlow, {
-  ReactFlowInstance,
-  Node,
-  Edge,
-  addEdge,
-  useNodesState,
-  useEdgesState,
+import {
+  ReactFlow,
   Controls,
   MiniMap,
   Background,
+  useNodesState,
+  useEdgesState,
+  Node,
+  Edge,
   NodeProps,
-} from 'reactflow';
-import dagre from 'dagre';
-import htmlToImage from 'html-to-image';
-import download from 'downloadjs';
+  ReactFlowInstance,
+  Position
+} from '@xyflow/react';
+import dagre from '@dagrejs/dagre';
+import { saveAs } from 'file-saver';
+import { toPng } from 'html-to-image';
 
-import 'reactflow/dist/style.css';
+import '@xyflow/react/dist/style.css';
 import { ParsedLogData, ContactFlowModule } from '@/types/log';
 import ContactFlowTable from './ContactFlowTable';
-
-interface FlowVisualizerProps {
-  data: ParsedLogData | null;
-}
 
 const dagreGraph = new dagre.graphlib.Graph();
 dagreGraph.setDefaultEdgeLabel(() => ({}));
@@ -48,10 +46,10 @@ const getLayoutedElements = (
 
   nodes.forEach((node) => {
     const nodeWithPosition = dagreGraph.node(node.id);
-    node.targetPosition = 'top';
-    node.sourcePosition = 'bottom';
+    node.targetPosition = direction === 'TB' ? Position.Top : Position.Left;
+    node.sourcePosition = direction === 'TB' ? Position.Bottom : Position.Right;
 
-    // We are shifting the dagre node position (defined center ) to the top left
+    // We are shifting the dagre node position (defined center) to the top left
     // so it matches the React Flow node anchor point
     node.position = {
       x: nodeWithPosition.x - nodeWidth / 2,
@@ -64,7 +62,7 @@ const getLayoutedElements = (
   return { nodes, edges };
 };
 
-const ContactFlowNode = ({ data, selected }: NodeProps) => {
+const ContactFlowNode = ({ data }: NodeProps) => {
   return (
     <div className="react-flow__node-contactflow">
       <div>{data.label}</div>
@@ -72,7 +70,7 @@ const ContactFlowNode = ({ data, selected }: NodeProps) => {
   );
 };
 
-const ModuleNode = ({ data, selected }: NodeProps) => {
+const ModuleNode = ({ data }: NodeProps) => {
   const [expanded, setExpanded] = useState(false);
 
   const toggleExpand = () => {
@@ -90,7 +88,7 @@ const ModuleNode = ({ data, selected }: NodeProps) => {
               {Object.entries(data.parameters).map(([key, value]) => (
                 <div key={key} className="parameter-item">
                   <span className="font-medium">{key}:</span>
-                  <span>{value}</span>
+                  <span>{String(value)}</span>
                 </div>
               ))}
             </div>
@@ -111,17 +109,25 @@ const nodeTypes = {
   module: ModuleNode,
 };
 
+interface FlowVisualizerProps {
+  data: ParsedLogData | null;
+}
+
 const FlowVisualizer = ({ data }: FlowVisualizerProps) => {
   const [nodes, setNodes] = useState<Node[]>([]);
   const [edges, setEdges] = useState<Edge[]>([]);
   const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
+  const [layoutDirection, setLayoutDirection] = useState<'TB' | 'LR'>('TB');
 
   useEffect(() => {
     if (!data) return;
 
     const initialNodes: Node[] = data.modules.map((module) => ({
       id: module.id,
-      data: { label: module.name, parameters: module.parameters },
+      data: {
+        label: module.name || "Unnamed Module",
+        parameters: module.parameters || {},
+      },
       position: { x: 0, y: 0 },
       type: module.type === 'ContactFlowModule' ? 'module' : 'contactflow',
     }));
@@ -134,26 +140,35 @@ const FlowVisualizer = ({ data }: FlowVisualizerProps) => {
 
     const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
       initialNodes,
-      initialEdges
+      initialEdges,
+      layoutDirection
     );
 
     setNodes(layoutedNodes);
     setEdges(layoutedEdges);
-  }, [data]);
+  }, [data, layoutDirection]);
 
-  const exportAsJpg = useCallback(async () => {
+  const toggleLayoutDirection = () => {
+    setLayoutDirection(prev => prev === 'TB' ? 'LR' : 'TB');
+  };
+
+  const exportAsPng = useCallback(async () => {
     if (!reactFlowInstance) return;
 
-    const image = await reactFlowInstance.toCanvas({
-      x: 0,
-      y: 0,
-      width: 2000,
-      height: 2000,
-      // zoom: 1.5,
-    });
+    const flowContainer = document.querySelector('.react-flow') as HTMLElement;
+    if (!flowContainer) return;
 
-    if (image) {
-      download(image, 'contactflow.jpg', 'image/jpeg');
+    try {
+      const dataUrl = await toPng(flowContainer, {
+        backgroundColor: '#ffffff',
+        width: 1920,
+        height: 1080,
+        skipFonts: true,
+      });
+      
+      saveAs(dataUrl, 'contact-flow-visualization.png');
+    } catch (error) {
+      console.error('Error exporting image:', error);
     }
   }, [reactFlowInstance]);
 
@@ -161,15 +176,23 @@ const FlowVisualizer = ({ data }: FlowVisualizerProps) => {
     <div className="flow-container">
       <div className="flow-controls flex justify-between items-center">
         <ContactFlowTable data={data} nodes={nodes} />
-        <button
-          onClick={exportAsJpg}
-          className="ml-auto bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded-md transition-colors flex items-center space-x-2"
-        >
-          <span>Export as JPG</span>
-        </button>
+        <div className="flex space-x-2">
+          <button
+            onClick={toggleLayoutDirection}
+            className="bg-secondary hover:bg-secondary/80 text-secondary-foreground px-4 py-2 rounded-md transition-colors flex items-center space-x-2"
+          >
+            <span>{layoutDirection === 'TB' ? 'Horizontal Layout' : 'Vertical Layout'}</span>
+          </button>
+          <button 
+            onClick={exportAsPng} 
+            className="bg-primary hover:bg-primary/80 text-primary-foreground px-4 py-2 rounded-md transition-colors flex items-center space-x-2"
+          >
+            <span>Export as PNG</span>
+          </button>
+        </div>
       </div>
       
-      <div className="flow-wrapper">
+      <div className="flow-wrapper bg-background border border-border rounded-md overflow-hidden" style={{ height: '70vh' }}>
         {nodes.length > 0 && edges.length > 0 ? (
           <ReactFlow
             nodes={nodes}

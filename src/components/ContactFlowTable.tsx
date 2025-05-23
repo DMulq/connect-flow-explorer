@@ -18,7 +18,7 @@ interface ContactFlowTableProps {
 }
 
 const ContactFlowTable = ({ data, nodes }: ContactFlowTableProps) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   
   // Extract unique contact flows
   const contactFlows: Array<{ id: string; name: string }> = [];
@@ -43,10 +43,10 @@ const ContactFlowTable = ({ data, nodes }: ContactFlowTableProps) => {
   const totalErrors = Array.from(flowErrors.values()).reduce((sum, count) => sum + count, 0);
 
   return (
-    <div className="contact-flow-table rounded-md border mb-4 bg-white">
+    <div className="contact-flow-table rounded-md border mb-4 bg-card w-full">
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
         <CollapsibleTrigger className="w-full">
-          <div className="px-4 py-2 flex items-center justify-between border-b cursor-pointer hover:bg-gray-50">
+          <div className="px-4 py-2 flex items-center justify-between border-b cursor-pointer hover:bg-secondary/50 transition-colors">
             <div className="flex items-center">
               <TableIcon className="h-4 w-4 mr-2" />
               <h3 className="font-medium text-sm">
@@ -81,7 +81,8 @@ const ContactFlowTable = ({ data, nodes }: ContactFlowTableProps) => {
                       <TableCell className="text-right">
                         {errorCount > 0 ? (
                           <div className="flex items-center justify-end">
-                            <div className="error-count">
+                            <div className="error-count flex items-center">
+                              <AlertTriangle className="h-3 w-3 mr-1" />
                               {errorCount}
                             </div>
                           </div>
