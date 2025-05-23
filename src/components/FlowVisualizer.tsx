@@ -1,28 +1,30 @@
+
 import React, { useState, useEffect, useCallback } from 'react';
-import ReactFlow, {
-  ReactFlowInstance,
-  Node,
-  Edge,
-  addEdge,
+import { 
+  ReactFlow, 
+  Controls, 
+  MiniMap, 
+  Background,
   useNodesState,
   useEdgesState,
-  Controls,
-  MiniMap,
-  Background,
+  addEdge,
+  Node,
+  Edge,
   NodeProps,
-} from 'reactflow';
-import dagre from 'dagre';
-import htmlToImage from 'html-to-image';
-import download from 'downloadjs';
+  ReactFlowInstance
+} from '@xyflow/react';
+import dagre from '@dagrejs/dagre';
+import { toPng } from 'html-to-image';
+import { saveAs } from 'file-saver';
 
-import 'reactflow/dist/style.css';
-import { ParsedLogData, ContactFlowModule } from '@/types/log';
+import { ParsedLogData } from '@/types/log';
 import ContactFlowTable from './ContactFlowTable';
 
 interface FlowVisualizerProps {
   data: ParsedLogData | null;
 }
 
+// Set up the dagre graph
 const dagreGraph = new dagre.graphlib.Graph();
 dagreGraph.setDefaultEdgeLabel(() => ({}));
 
@@ -48,10 +50,10 @@ const getLayoutedElements = (
 
   nodes.forEach((node) => {
     const nodeWithPosition = dagreGraph.node(node.id);
-    node.targetPosition = 'top';
-    node.sourcePosition = 'bottom';
+    node.targetPosition = direction === 'TB' ? 'top' : 'left';
+    node.sourcePosition = direction === 'TB' ? 'bottom' : 'right';
 
-    // We are shifting the dagre node position (defined center ) to the top left
+    // We are shifting the dagre node position (defined center) to the top left
     // so it matches the React Flow node anchor point
     node.position = {
       x: nodeWithPosition.x - nodeWidth / 2,
@@ -64,7 +66,7 @@ const getLayoutedElements = (
   return { nodes, edges };
 };
 
-const ContactFlowNode = ({ data, selected }: NodeProps) => {
+const ContactFlowNode: React.FC<NodeProps> = ({ data }) => {
   return (
     <div className="react-flow__node-contactflow">
       <div>{data.label}</div>
@@ -72,7 +74,7 @@ const ContactFlowNode = ({ data, selected }: NodeProps) => {
   );
 };
 
-const ModuleNode = ({ data, selected }: NodeProps) => {
+const ModuleNode: React.FC<NodeProps> = ({ data }) => {
   const [expanded, setExpanded] = useState(false);
 
   const toggleExpand = () => {
@@ -90,12 +92,12 @@ const ModuleNode = ({ data, selected }: NodeProps) => {
               {Object.entries(data.parameters).map(([key, value]) => (
                 <div key={key} className="parameter-item">
                   <span className="font-medium">{key}:</span>
-                  <span>{value}</span>
+                  <span>{String(value)}</span>
                 </div>
               ))}
             </div>
             {Object.keys(data.parameters).length > 3 && (
-              <button onClick={toggleExpand} className="mt-2 text-sm">
+              <button onClick={toggleExpand} className="mt-2 text-xs px-2 py-1 rounded bg-aws-blue/30 hover:bg-aws-blue/50 text-white transition-colors">
                 {expanded ? 'Collapse' : 'Expand'}
               </button>
             )}
@@ -111,25 +113,29 @@ const nodeTypes = {
   module: ModuleNode,
 };
 
-const FlowVisualizer = ({ data }: FlowVisualizerProps) => {
-  const [nodes, setNodes] = useState<Node[]>([]);
-  const [edges, setEdges] = useState<Edge[]>([]);
+const FlowVisualizer: React.FC<FlowVisualizerProps> = ({ data }) => {
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
 
   useEffect(() => {
-    if (!data) return;
+    if (!data || !data.nodes || !data.edges) return;
 
-    const initialNodes: Node[] = data.modules.map((module) => ({
-      id: module.id,
-      data: { label: module.name, parameters: module.parameters },
+    const initialNodes: Node[] = data.nodes.map((node) => ({
+      id: node.id,
+      data: { 
+        label: node.name || node.id, 
+        parameters: node.parameters || {} 
+      },
       position: { x: 0, y: 0 },
-      type: module.type === 'ContactFlowModule' ? 'module' : 'contactflow',
+      type: node.type === 'module' ? 'module' : 'contactflow',
     }));
 
-    const initialEdges: Edge[] = data.connections.map((connection) => ({
-      id: `e-${connection.source}-${connection.target}`,
-      source: connection.source,
-      target: connection.target,
+    const initialEdges: Edge[] = data.edges.map((edge, index) => ({
+      id: `e-${edge.source}-${edge.target}-${index}`,
+      source: edge.source,
+      target: edge.target,
+      animated: true,
     }));
 
     const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
@@ -139,33 +145,44 @@ const FlowVisualizer = ({ data }: FlowVisualizerProps) => {
 
     setNodes(layoutedNodes);
     setEdges(layoutedEdges);
-  }, [data]);
+  }, [data, setNodes, setEdges]);
 
-  const exportAsJpg = useCallback(async () => {
+  const exportAsImage = useCallback(async () => {
     if (!reactFlowInstance) return;
 
-    const image = await reactFlowInstance.toCanvas({
-      x: 0,
-      y: 0,
-      width: 2000,
-      height: 2000,
-      // zoom: 1.5,
-    });
+    const flowElement = document.querySelector('.react-flow') as HTMLElement;
+    if (!flowElement) return;
 
-    if (image) {
-      download(image, 'contactflow.jpg', 'image/jpeg');
+    try {
+      const dataUrl = await toPng(flowElement, {
+        backgroundColor: '#161E2D',
+        width: flowElement.clientWidth * 2,
+        height: flowElement.clientHeight * 2,
+        style: {
+          transform: 'scale(2)',
+          transformOrigin: 'top left',
+        },
+      });
+      saveAs(dataUrl, 'aws-connect-flow.png');
+    } catch (error) {
+      console.error('Error exporting image:', error);
     }
   }, [reactFlowInstance]);
+
+  const onConnect = useCallback(
+    (params: any) => setEdges((eds) => addEdge({ ...params, animated: true }, eds)),
+    [setEdges]
+  );
 
   return (
     <div className="flow-container">
       <div className="flow-controls flex justify-between items-center">
         <ContactFlowTable data={data} nodes={nodes} />
         <button
-          onClick={exportAsJpg}
-          className="ml-auto bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded-md transition-colors flex items-center space-x-2"
+          onClick={exportAsImage}
+          className="ml-auto bg-aws-orange hover:bg-aws-orange/80 text-aws-navy font-medium px-4 py-2 rounded transition-colors flex items-center space-x-2"
         >
-          <span>Export as JPG</span>
+          <span>Export as PNG</span>
         </button>
       </div>
       
@@ -174,16 +191,20 @@ const FlowVisualizer = ({ data }: FlowVisualizerProps) => {
           <ReactFlow
             nodes={nodes}
             edges={edges}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            onConnect={onConnect}
             nodeTypes={nodeTypes}
             fitView
             minZoom={0.1}
             maxZoom={1.5}
             defaultViewport={{ x: 0, y: 0, zoom: 0.5 }}
-            onInit={(instance) => setReactFlowInstance(instance as ReactFlowInstance)}
+            onInit={setReactFlowInstance}
+            proOptions={{ hideAttribution: true }}
           >
-            <Controls />
-            <MiniMap zoomable pannable nodeClassName={(node) => `node-${node.type}`} />
-            <Background color="#aaa" gap={16} />
+            <Controls className="react-flow__controls" />
+            <MiniMap zoomable pannable nodeColor={(node) => node.type === 'module' ? '#00A1C9' : '#0073BB'} />
+            <Background color="#6b7280" gap={16} size={1} />
           </ReactFlow>
         ) : (
           <div className="flex items-center justify-center h-full">

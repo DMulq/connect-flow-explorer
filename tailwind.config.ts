@@ -55,6 +55,14 @@ export default {
 				card: {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
+				},
+				aws: {
+					orange: '#FF9900',
+					blue: '#0073BB',
+					teal: '#00A1C9',
+					navy: '#232F3E',
+					darknavy: '#161E2D',
+					charcoal: '#1A1A1A',
 				}
 			},
 			borderRadius: {

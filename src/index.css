@@ -7,65 +7,35 @@
 
 @layer base {
   :root {
-    --background: 224 71% 4%;
-    --foreground: 213 31% 91%;
+    --background: 220 20% 10%;
+    --foreground: 220 10% 92%;
 
-    --card: 224 71% 6%;
-    --card-foreground: 213 31% 91%;
+    --card: 220 20% 13%;
+    --card-foreground: 220 10% 90%;
 
-    --popover: 224 71% 4%;
-    --popover-foreground: 215 20.2% 65.1%;
+    --popover: 220 20% 10%;
+    --popover-foreground: 220 10% 90%;
 
-    --primary: 210 100% 66%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 36 100% 50%;
+    --primary-foreground: 220 20% 10%;
 
-    --secondary: 266 100% 76%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 196 100% 39%;
+    --secondary-foreground: 220 10% 95%;
 
-    --accent: 261 76% 65%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 200 77% 55%;
+    --accent-foreground: 220 10% 95%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 220 15% 18%;
+    --muted-foreground: 220 10% 70%;
 
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 48%;
+    --border: 220 15% 20%;
+    --input: 220 15% 20%;
+    --ring: 36 100% 50%;
 
-    --radius: 0.75rem;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 250 84% 70%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 250 95% 76%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 48%;
+    --radius: 0.5rem;
   }
 }
 
@@ -89,19 +59,19 @@
 }
 
 .text-gradient {
-  @apply bg-gradient-to-br from-foreground via-foreground/90 to-foreground/70 bg-clip-text text-transparent;
+  @apply bg-gradient-to-r from-aws-orange via-aws-teal to-aws-blue bg-clip-text text-transparent;
 }
 
 .text-gradient-primary {
-  @apply bg-gradient-to-br from-primary via-primary/90 to-secondary/90 bg-clip-text text-transparent;
+  @apply bg-gradient-to-r from-aws-orange to-aws-teal bg-clip-text text-transparent;
 }
 
 .card-gradient {
-  @apply bg-gradient-to-br from-card to-muted/30 backdrop-blur-sm border border-border/50;
+  @apply bg-gradient-to-b from-aws-navy to-aws-darknavy backdrop-blur-sm border border-aws-blue/10;
 }
 
 .glass-container {
-  @apply bg-card/40 backdrop-blur-md border border-white/5 shadow-xl;
+  @apply bg-aws-darknavy/80 backdrop-blur-md border border-aws-teal/10 shadow-xl;
 }
 
 /* Flow Container Styles */
@@ -115,15 +85,10 @@
 
 .flow-controls {
   padding: 8px 16px;
-  background-color: rgba(20, 20, 30, 0.7);
+  background-color: rgba(35, 47, 62, 0.9);
   z-index: 5;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(0, 161, 201, 0.2);
   backdrop-filter: blur(10px);
-}
-
-.dark .flow-controls {
-  background-color: rgba(30, 30, 30, 0.7);
-  border-bottom: 1px solid #333;
 }
 
 .flow-wrapper {
@@ -136,28 +101,31 @@
 .react-flow {
   width: 100%;
   height: 100%;
+  background-color: var(--aws-darknavy);
 }
 
 .react-flow__node {
   padding: 10px;
-  border-radius: 12px;
+  border-radius: 8px;
   width: 200px;
   font-size: 12px;
   text-align: left;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
   transition: all 0.3s ease;
   z-index: 0;
 }
 
 .react-flow__node-contactflow {
-  background-color: hsl(var(--primary));
+  background-color: #0073BB;
   color: white;
   font-weight: bold;
+  border: 1px solid rgba(255, 153, 0, 0.3);
 }
 
 .react-flow__node-module {
-  background-color: hsl(var(--secondary));
+  background-color: #00A1C9;
   color: white;
+  border: 1px solid rgba(255, 153, 0, 0.3);
 }
 
 .react-flow__node-module .node-content {
@@ -186,10 +154,11 @@
   max-height: 80px;
   overflow-y: auto;
   font-size: 11px;
-  padding: 4px;
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 3px;
-  margin-top: 4px;
+  padding: 6px;
+  background-color: rgba(22, 30, 45, 0.7);
+  border-radius: 4px;
+  margin-top: 6px;
+  border: 1px solid rgba(0, 161, 201, 0.2);
 }
 
 .dark .parameter-list {
@@ -243,9 +212,12 @@
 .contact-flow-table th {
   text-align: left;
   padding: 8px 12px;
-  background-color: #f3f4f6;
+  background-color: #232F3E;
   position: sticky;
   top: 0;
+  color: #FF9900;
+  font-weight: 500;
+  border-bottom: 1px solid rgba(0, 161, 201, 0.2);
 }
 
 .dark .contact-flow-table th {
@@ -254,7 +226,8 @@
 
 .contact-flow-table td {
   padding: 8px 12px;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid rgba(0, 161, 201, 0.1);
+  color: #f0f0f0;
 }
 
 .dark .contact-flow-table td {
@@ -277,6 +250,29 @@
 
 /* Custom styles for edges */
 .react-flow__edge-path {
+  stroke: #00A1C9;
   stroke-width: 2;
-  border-radius: 16px;
+  opacity: 0.8;
+}
+
+.react-flow__controls {
+  background-color: #232F3E;
+  border: 1px solid rgba(0, 161, 201, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.react-flow__controls button {
+  background-color: #161E2D;
+  color: #FF9900;
+  border-bottom: 1px solid rgba(0, 161, 201, 0.2);
+}
+
+.react-flow__controls button:hover {
+  background-color: #FF9900;
+  color: #161E2D;
+}
+
+.react-flow__minimap {
+  background-color: #232F3E;
+  border: 1px solid rgba(0, 161, 201, 0.3);
 }
