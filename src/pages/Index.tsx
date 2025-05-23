@@ -41,7 +41,7 @@ const Index = () => {
       {/* Header */}
       <header className="border-b border-border">
         <div className="container mx-auto py-4 flex justify-between items-center">
-          <h1 className="text-xl font-bold">Contact Flow Visualizer</h1>
+          <h1 className="text-xl font-bold">Contact Flow Log Analyser</h1>
           
           {!parsedData && (
             <Dialog>
@@ -113,7 +113,7 @@ const Index = () => {
       {/* Footer */}
       <footer className="border-t border-border py-4">
         <div className="container mx-auto text-center text-muted-foreground text-sm">
-          <p>Contact Flow Visualizer</p>
+          <p>Contact Flow Log Analyser</p>
         </div>
       </footer>
     </div>
