@@ -13,15 +13,13 @@ import {
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 
 interface ContactFlowTableProps {
-  data: ParsedLogData | null;
+  data: ParsedLogData;
   nodes: any[];
 }
 
 const ContactFlowTable = ({ data, nodes }: ContactFlowTableProps) => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   
-  if (!data) return null;
-
   // Extract unique contact flows
   const contactFlows: Array<{ id: string; name: string }> = [];
   data.contactFlows.forEach((name, id) => {
@@ -32,8 +30,8 @@ const ContactFlowTable = ({ data, nodes }: ContactFlowTableProps) => {
   const flowErrors = new Map<string, number>();
   
   nodes.forEach(node => {
-    if (node.data?.flowId && 
-        node.data?.results && 
+    if (node.data.flowId && 
+        node.data.results && 
         typeof node.data.results === 'string' && 
         node.data.results.includes('Error')) {
       const currentCount = flowErrors.get(node.data.flowId) || 0;
@@ -45,14 +43,14 @@ const ContactFlowTable = ({ data, nodes }: ContactFlowTableProps) => {
   const totalErrors = Array.from(flowErrors.values()).reduce((sum, count) => sum + count, 0);
 
   return (
-    <div className="contact-flow-table w-full max-w-lg">
+    <div className="contact-flow-table rounded-md border mb-4 bg-white">
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
         <CollapsibleTrigger className="w-full">
-          <div className="px-4 py-2 flex items-center justify-between rounded-t-md cursor-pointer bg-aws-darknavy hover:bg-aws-navy border border-aws-teal/30 text-white">
+          <div className="px-4 py-2 flex items-center justify-between border-b cursor-pointer hover:bg-gray-50">
             <div className="flex items-center">
-              <TableIcon className="h-4 w-4 mr-2 text-aws-teal" />
+              <TableIcon className="h-4 w-4 mr-2" />
               <h3 className="font-medium text-sm">
-                Contact Flows ({contactFlows.length} flows, {nodes.length} blocks, {totalErrors > 0 ? <span className="text-aws-orange">{totalErrors} errors</span> : '0 errors'})
+                Contact Flows ({contactFlows.length} flows, {nodes.length} blocks, {totalErrors} errors)
               </h3>
             </div>
             <div>
@@ -62,22 +60,22 @@ const ContactFlowTable = ({ data, nodes }: ContactFlowTableProps) => {
         </CollapsibleTrigger>
         
         <CollapsibleContent>
-          <div className="max-h-48 overflow-y-auto bg-aws-navy/95 border-x border-b rounded-b-md border-aws-teal/30">
+          <div className="max-h-48 overflow-y-auto">
             <Table>
               <TableHeader>
-                <TableRow className="hover:bg-aws-darknavy/80">
-                  <TableHead className="w-[50%] text-aws-orange">Flow Name</TableHead>
-                  <TableHead className="text-aws-teal">Flow ID</TableHead>
-                  <TableHead className="text-right text-aws-orange">Errors</TableHead>
+                <TableRow>
+                  <TableHead className="w-[50%]">Flow Name</TableHead>
+                  <TableHead>Flow ID</TableHead>
+                  <TableHead className="text-right">Errors</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {contactFlows.map(flow => {
                   const errorCount = flowErrors.get(flow.id) || 0;
                   return (
-                    <TableRow key={flow.id} className="hover:bg-aws-darknavy/60 border-b border-aws-teal/10">
-                      <TableCell className="font-medium text-white">{flow.name}</TableCell>
-                      <TableCell className="text-xs text-aws-teal/80 truncate max-w-[200px]">
+                    <TableRow key={flow.id}>
+                      <TableCell className="font-medium">{flow.name}</TableCell>
+                      <TableCell className="text-sm text-muted-foreground truncate max-w-[200px]">
                         {flow.id}
                       </TableCell>
                       <TableCell className="text-right">
@@ -88,7 +86,7 @@ const ContactFlowTable = ({ data, nodes }: ContactFlowTableProps) => {
                             </div>
                           </div>
                         ) : (
-                          <span className="text-sm text-green-500">None</span>
+                          <span className="text-sm text-green-600">None</span>
                         )}
                       </TableCell>
                     </TableRow>

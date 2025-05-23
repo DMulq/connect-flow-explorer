@@ -1,5 +1,4 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 @import '@xyflow/react/dist/style.css';
 
 @tailwind base;
@@ -8,42 +7,71 @@
 
 @layer base {
   :root {
-    --background: 220 20% 10%;
-    --foreground: 220 10% 92%;
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
 
-    --card: 220 20% 13%;
-    --card-foreground: 220 10% 90%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
 
-    --popover: 220 20% 10%;
-    --popover-foreground: 220 10% 90%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 36 100% 50%;
-    --primary-foreground: 220 20% 10%;
+    --primary: 221 83% 53%;
+    --primary-foreground: 210 40% 98%;
 
-    --secondary: 196 100% 39%;
-    --secondary-foreground: 220 10% 95%;
+    --secondary: 250 84% 70%;
+    --secondary-foreground: 210 40% 98%;
 
-    --accent: 200 77% 55%;
-    --accent-foreground: 220 10% 95%;
+    --accent: 250 95% 76%;
+    --accent-foreground: 222.2 47.4% 11.2%;
 
-    --muted: 220 15% 18%;
-    --muted-foreground: 220 10% 70%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 220 15% 20%;
-    --input: 220 15% 20%;
-    --ring: 36 100% 50%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221 83% 53%;
 
     --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 250 84% 70%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 250 95% 76%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 48%;
   }
 }
 
 @layer base {
   * {
     @apply border-border;
-    font-family: 'Poppins', sans-serif;
   }
 
   body {
@@ -55,24 +83,8 @@
     height: 100%;
     margin: 0;
     padding: 0;
-    overflow-x: hidden;
+    overflow: hidden;
   }
-}
-
-.text-gradient {
-  @apply bg-gradient-to-r from-aws-orange via-aws-teal to-aws-blue bg-clip-text text-transparent;
-}
-
-.text-gradient-primary {
-  @apply bg-gradient-to-r from-aws-orange to-aws-teal bg-clip-text text-transparent;
-}
-
-.card-gradient {
-  @apply bg-gradient-to-b from-aws-navy to-aws-darknavy backdrop-blur-sm border border-aws-blue/10;
-}
-
-.glass-container {
-  @apply bg-aws-darknavy/80 backdrop-blur-md border border-aws-teal/20 shadow-xl;
 }
 
 /* Flow Container Styles */
@@ -86,30 +98,26 @@
 
 .flow-controls {
   padding: 8px 16px;
-  background-color: rgba(35, 47, 62, 0.9);
+  background-color: rgba(255, 255, 255, 0.7);
   z-index: 5;
-  border-bottom: 1px solid rgba(0, 161, 201, 0.2);
-  backdrop-filter: blur(10px);
+  border-bottom: 1px solid #eaeaea;
+}
+
+.dark .flow-controls {
+  background-color: rgba(30, 30, 30, 0.7);
+  border-bottom: 1px solid #333;
 }
 
 .flow-wrapper {
   flex: 1;
   width: 100%;
   position: relative;
-  height: calc(100% - 60px);
 }
 
 /* React Flow Specific Styles */
 .react-flow {
   width: 100%;
   height: 100%;
-  background-color: #161E2D;
-}
-
-.aws-flow-bg {
-  background-color: #161E2D;
-  background-image: radial-gradient(rgba(0, 161, 201, 0.03) 1px, transparent 1px);
-  background-size: 20px 20px;
 }
 
 .react-flow__node {
@@ -118,22 +126,20 @@
   width: 200px;
   font-size: 12px;
   text-align: left;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-  transition: all 0.3s ease;
-  z-index: 1;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  transition: all 0.2s ease;
+  z-index: 0;
 }
 
 .react-flow__node-contactflow {
-  background-color: #0073BB;
+  background-color: #3b82f6;
   color: white;
   font-weight: bold;
-  border: 1px solid rgba(255, 153, 0, 0.3);
 }
 
 .react-flow__node-module {
-  background-color: #00A1C9;
+  background-color: #a78bfa;
   color: white;
-  border: 1px solid rgba(255, 153, 0, 0.3);
 }
 
 .react-flow__node-module .node-content {
@@ -148,7 +154,7 @@
   max-width: 500px;
   z-index: 999;
   overflow: visible;
-  background-color: #00A1C9;
+  background-color: #a78bfa;
   position: absolute;
   border-radius: 8px;
   padding: 12px;
@@ -156,18 +162,20 @@
   top: 0;
   left: 0;
   transform: translate(-25%, -10%);
-  border: 1px solid rgba(255, 153, 0, 0.3);
 }
 
 .parameter-list {
   max-height: 80px;
   overflow-y: auto;
   font-size: 11px;
-  padding: 6px;
-  background-color: rgba(22, 30, 45, 0.7);
-  border-radius: 4px;
-  margin-top: 6px;
-  border: 1px solid rgba(0, 161, 201, 0.2);
+  padding: 4px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  margin-top: 4px;
+}
+
+.dark .parameter-list {
+  background-color: rgba(0, 0, 0, 0.2);
 }
 
 .expanded-parameter-list {
@@ -204,7 +212,7 @@
 
 /* Contact Flow Table Styles */
 .contact-flow-table {
-  margin-bottom: 0;
+  margin-bottom: 16px;
   overflow-x: auto;
 }
 
@@ -217,18 +225,22 @@
 .contact-flow-table th {
   text-align: left;
   padding: 8px 12px;
-  background-color: #232F3E;
+  background-color: #f3f4f6;
   position: sticky;
   top: 0;
-  color: #FF9900;
-  font-weight: 500;
-  border-bottom: 1px solid rgba(0, 161, 201, 0.2);
+}
+
+.dark .contact-flow-table th {
+  background-color: #1e293b;
 }
 
 .contact-flow-table td {
   padding: 8px 12px;
-  border-top: 1px solid rgba(0, 161, 201, 0.1);
-  color: #f0f0f0;
+  border-top: 1px solid #e5e7eb;
+}
+
+.dark .contact-flow-table td {
+  border-top: 1px solid #334155;
 }
 
 .error-count {
@@ -247,50 +259,6 @@
 
 /* Custom styles for edges */
 .react-flow__edge-path {
-  stroke: #00A1C9;
   stroke-width: 2;
-  opacity: 0.8;
-}
-
-.react-flow__controls {
-  background-color: #232F3E;
-  border: 1px solid rgba(0, 161, 201, 0.3);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
-.react-flow__controls button {
-  background-color: #161E2D;
-  color: #FF9900;
-  border-bottom: 1px solid rgba(0, 161, 201, 0.2);
-}
-
-.react-flow__controls button:hover {
-  background-color: #FF9900;
-  color: #161E2D;
-}
-
-.react-flow__minimap {
-  background-color: #232F3E;
-  border: 1px solid rgba(0, 161, 201, 0.3);
-}
-
-/* Fix for ensuring edges connect properly to nodes */
-.react-flow__handle {
-  opacity: 0;
-  pointer-events: all;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background-color: transparent;
-  border: none;
-}
-
-.react-flow__handle-connecting {
-  opacity: 1;
-  background-color: #FF9900;
-}
-
-.react-flow__handle-valid {
-  opacity: 1;
-  background-color: #2ecc71;
+  border-radius: 16px;
 }
