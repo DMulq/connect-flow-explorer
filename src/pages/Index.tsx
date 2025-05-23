@@ -6,12 +6,14 @@ import { LogEntry, ParsedLogData } from "@/types/log";
 import { processLogData } from "@/utils/logProcessor";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/sonner";
-import { FileUpIcon, UploadCloudIcon, BarChart3Icon } from "lucide-react";
+import { FileUpIcon, UploadCloudIcon, BarChart3Icon, HelpCircleIcon } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 const Index = () => {
   const [parsedData, setParsedData] = useState<ParsedLogData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showHowToUse, setShowHowToUse] = useState(false);
 
   const handleParsedData = (entries: LogEntry[]) => {
     try {
@@ -41,8 +43,36 @@ const Index = () => {
             <BarChart3Icon className="h-6 w-6 text-aws-orange" />
             <h1 className="text-2xl font-semibold text-gradient">AWS Connect Flow Visualizer</h1>
           </div>
+          
+          {!parsedData && (
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => setShowHowToUse(true)}
+              className="hover:bg-aws-orange hover:text-aws-darknavy text-aws-orange border-aws-orange/20"
+            >
+              <HelpCircleIcon className="h-4 w-4 mr-1" />
+              How to Use
+            </Button>
+          )}
         </div>
       </header>
+
+      {/* How to Use Dialog */}
+      <Dialog open={showHowToUse} onOpenChange={setShowHowToUse}>
+        <DialogContent className="bg-aws-navy border-aws-teal/30">
+          <DialogHeader>
+            <DialogTitle className="text-gradient-primary text-xl">How to Use AWS Connect Flow Visualizer</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 mt-4">
+            <ul className="list-disc list-inside space-y-2 text-foreground">
+              <li>Search for your specific Contact ID in Cloud Watch.</li>
+              <li>Export the logs as CSV including the following columns: timestamp & message.</li>
+              <li>Then upload it here.</li>
+            </ul>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Main content */}
       <main className="flex-1 container mx-auto py-8 px-4 md:px-6 flex flex-col">
