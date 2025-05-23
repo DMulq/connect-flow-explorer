@@ -4,6 +4,15 @@ import FileUploader from "@/components/FileUploader";
 import FlowVisualizer from "@/components/FlowVisualizer";
 import { LogEntry, ParsedLogData } from "@/types/log";
 import { processLogData } from "@/utils/logProcessor";
+import { HelpCircle } from "lucide-react";
+import { 
+  Dialog, 
+  DialogContent, 
+  DialogHeader, 
+  DialogTitle, 
+  DialogTrigger 
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 const Index = () => {
   const [parsedData, setParsedData] = useState<ParsedLogData | null>(null);
@@ -33,6 +42,29 @@ const Index = () => {
       <header className="border-b border-border">
         <div className="container mx-auto py-4 flex justify-between items-center">
           <h1 className="text-xl font-bold">Contact Flow Visualizer</h1>
+          
+          {!parsedData && (
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="outline" size="sm" className="flex items-center gap-2">
+                  <HelpCircle size={16} />
+                  How to Use
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle className="mb-4">How to Use</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4">
+                  <ul className="list-disc pl-5 space-y-2">
+                    <li>Search for your specific Contact ID in Cloud Watch.</li>
+                    <li>Export the logs as CSV including the following columns: timestamp & message.</li>
+                    <li>Then upload it here.</li>
+                  </ul>
+                </div>
+              </DialogContent>
+            </Dialog>
+          )}
         </div>
       </header>
 
