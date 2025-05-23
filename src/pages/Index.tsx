@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import FileUploader from "@/components/FileUploader";
 import FlowVisualizer from "@/components/FlowVisualizer";
@@ -41,7 +40,14 @@ const Index = () => {
       {/* Header */}
       <header className="border-b border-border">
         <div className="container mx-auto py-4 flex justify-between items-center">
-          <h1 className="text-xl font-bold">Contact Flow Log Analyser</h1>
+          <div className="flex items-center gap-3">
+            <img 
+              src="/lovable-uploads/8c1aa2ff-dadc-4c73-9857-da2c7492c6b3.png" 
+              alt="Contact Flow Logo" 
+              className="h-8 w-8"
+            />
+            <h1 className="text-xl font-bold">Contact Flow Log Analyser</h1>
+          </div>
           
           {!parsedData && (
             <Dialog>
@@ -113,7 +119,14 @@ const Index = () => {
       {/* Footer */}
       <footer className="border-t border-border py-4">
         <div className="container mx-auto text-center text-muted-foreground text-sm">
-          <p>Contact Flow Log Analyser</p>
+          <div className="flex items-center justify-center gap-2">
+            <img 
+              src="/lovable-uploads/8c1aa2ff-dadc-4c73-9857-da2c7492c6b3.png" 
+              alt="Contact Flow Logo" 
+              className="h-5 w-5"
+            />
+            <p>Contact Flow Log Analyser</p>
+          </div>
         </div>
       </footer>
     </div>
