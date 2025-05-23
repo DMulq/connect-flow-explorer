@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 @import '@xyflow/react/dist/style.css';
 
@@ -54,7 +55,7 @@
     height: 100%;
     margin: 0;
     padding: 0;
-    overflow: hidden;
+    overflow-x: hidden;
   }
 }
 
@@ -71,7 +72,7 @@
 }
 
 .glass-container {
-  @apply bg-aws-darknavy/80 backdrop-blur-md border border-aws-teal/10 shadow-xl;
+  @apply bg-aws-darknavy/80 backdrop-blur-md border border-aws-teal/20 shadow-xl;
 }
 
 /* Flow Container Styles */
@@ -95,13 +96,20 @@
   flex: 1;
   width: 100%;
   position: relative;
+  height: calc(100% - 60px);
 }
 
 /* React Flow Specific Styles */
 .react-flow {
   width: 100%;
   height: 100%;
-  background-color: var(--aws-darknavy);
+  background-color: #161E2D;
+}
+
+.aws-flow-bg {
+  background-color: #161E2D;
+  background-image: radial-gradient(rgba(0, 161, 201, 0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
 }
 
 .react-flow__node {
@@ -112,7 +120,7 @@
   text-align: left;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
   transition: all 0.3s ease;
-  z-index: 0;
+  z-index: 1;
 }
 
 .react-flow__node-contactflow {
@@ -140,7 +148,7 @@
   max-width: 500px;
   z-index: 999;
   overflow: visible;
-  background-color: #a78bfa;
+  background-color: #00A1C9;
   position: absolute;
   border-radius: 8px;
   padding: 12px;
@@ -148,6 +156,7 @@
   top: 0;
   left: 0;
   transform: translate(-25%, -10%);
+  border: 1px solid rgba(255, 153, 0, 0.3);
 }
 
 .parameter-list {
@@ -159,10 +168,6 @@
   border-radius: 4px;
   margin-top: 6px;
   border: 1px solid rgba(0, 161, 201, 0.2);
-}
-
-.dark .parameter-list {
-  background-color: rgba(0, 0, 0, 0.2);
 }
 
 .expanded-parameter-list {
@@ -199,7 +204,7 @@
 
 /* Contact Flow Table Styles */
 .contact-flow-table {
-  margin-bottom: 16px;
+  margin-bottom: 0;
   overflow-x: auto;
 }
 
@@ -220,18 +225,10 @@
   border-bottom: 1px solid rgba(0, 161, 201, 0.2);
 }
 
-.dark .contact-flow-table th {
-  background-color: #1e293b;
-}
-
 .contact-flow-table td {
   padding: 8px 12px;
   border-top: 1px solid rgba(0, 161, 201, 0.1);
   color: #f0f0f0;
-}
-
-.dark .contact-flow-table td {
-  border-top: 1px solid #334155;
 }
 
 .error-count {
@@ -275,4 +272,25 @@
 .react-flow__minimap {
   background-color: #232F3E;
   border: 1px solid rgba(0, 161, 201, 0.3);
+}
+
+/* Fix for ensuring edges connect properly to nodes */
+.react-flow__handle {
+  opacity: 0;
+  pointer-events: all;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: transparent;
+  border: none;
+}
+
+.react-flow__handle-connecting {
+  opacity: 1;
+  background-color: #FF9900;
+}
+
+.react-flow__handle-valid {
+  opacity: 1;
+  background-color: #2ecc71;
 }

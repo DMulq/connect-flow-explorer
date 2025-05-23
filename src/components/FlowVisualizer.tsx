@@ -69,7 +69,7 @@ const getLayoutedElements = (
 const ContactFlowNode: React.FC<NodeProps> = ({ data }) => {
   return (
     <div className="react-flow__node-contactflow">
-      <div>{data.label}</div>
+      <div>{data?.label || 'Unnamed Node'}</div>
     </div>
   );
 };
@@ -84,8 +84,8 @@ const ModuleNode: React.FC<NodeProps> = ({ data }) => {
   return (
     <div className="react-flow__node-module">
       <div className={`node-content ${expanded ? 'expanded-node' : ''}`}>
-        <h4 className="font-bold">{data.label}</h4>
-        {data.parameters && Object.keys(data.parameters).length > 0 && (
+        <h4 className="font-bold">{data?.label || 'Unnamed Module'}</h4>
+        {data?.parameters && Object.keys(data.parameters).length > 0 && (
           <>
             <h5 className="font-medium mt-2">Parameters:</h5>
             <div className={`parameter-list ${expanded ? 'expanded-parameter-list' : ''}`}>
@@ -117,6 +117,7 @@ const FlowVisualizer: React.FC<FlowVisualizerProps> = ({ data }) => {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
+  const [direction, setDirection] = useState<'TB' | 'LR'>('TB');
 
   useEffect(() => {
     if (!data || !data.nodes || !data.edges) return;
@@ -136,16 +137,18 @@ const FlowVisualizer: React.FC<FlowVisualizerProps> = ({ data }) => {
       source: edge.source,
       target: edge.target,
       animated: true,
+      type: 'smoothstep',
     }));
 
     const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
       initialNodes,
-      initialEdges
+      initialEdges,
+      direction
     );
 
     setNodes(layoutedNodes);
     setEdges(layoutedEdges);
-  }, [data, setNodes, setEdges]);
+  }, [data, setNodes, setEdges, direction]);
 
   const exportAsImage = useCallback(async () => {
     if (!reactFlowInstance) return;
@@ -169,21 +172,33 @@ const FlowVisualizer: React.FC<FlowVisualizerProps> = ({ data }) => {
     }
   }, [reactFlowInstance]);
 
+  const toggleDirection = useCallback(() => {
+    setDirection(current => current === 'TB' ? 'LR' : 'TB');
+  }, []);
+
   const onConnect = useCallback(
-    (params: any) => setEdges((eds) => addEdge({ ...params, animated: true }, eds)),
+    (params: any) => setEdges((eds) => addEdge({ ...params, animated: true, type: 'smoothstep' }, eds)),
     [setEdges]
   );
 
   return (
     <div className="flow-container">
-      <div className="flow-controls flex justify-between items-center">
+      <div className="flow-controls flex justify-between items-center p-4 bg-aws-navy/90 border-b border-aws-teal/20">
         <ContactFlowTable data={data} nodes={nodes} />
-        <button
-          onClick={exportAsImage}
-          className="ml-auto bg-aws-orange hover:bg-aws-orange/80 text-aws-navy font-medium px-4 py-2 rounded transition-colors flex items-center space-x-2"
-        >
-          <span>Export as PNG</span>
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={toggleDirection}
+            className="bg-aws-blue hover:bg-aws-blue/80 text-white font-medium px-4 py-2 rounded transition-colors flex items-center space-x-2"
+          >
+            <span>{direction === 'TB' ? 'Horizontal Layout' : 'Vertical Layout'}</span>
+          </button>
+          <button
+            onClick={exportAsImage}
+            className="bg-aws-orange hover:bg-aws-orange/80 text-aws-navy font-medium px-4 py-2 rounded transition-colors flex items-center space-x-2"
+          >
+            <span>Export as PNG</span>
+          </button>
+        </div>
       </div>
       
       <div className="flow-wrapper">
@@ -201,9 +216,14 @@ const FlowVisualizer: React.FC<FlowVisualizerProps> = ({ data }) => {
             defaultViewport={{ x: 0, y: 0, zoom: 0.5 }}
             onInit={setReactFlowInstance}
             proOptions={{ hideAttribution: true }}
+            className="aws-flow-bg"
           >
             <Controls className="react-flow__controls" />
-            <MiniMap zoomable pannable nodeColor={(node) => node.type === 'module' ? '#00A1C9' : '#0073BB'} />
+            <MiniMap 
+              zoomable 
+              pannable 
+              nodeColor={(node) => node.type === 'module' ? '#00A1C9' : '#0073BB'} 
+            />
             <Background color="#6b7280" gap={16} size={1} />
           </ReactFlow>
         ) : (
