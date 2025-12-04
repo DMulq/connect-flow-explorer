@@ -2,80 +2,68 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
  
 @layer base {
   :root {
-    /* AWS Light Theme */
-    --background: 210 20% 98%;
-    --foreground: 220 20% 10%;
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
 
     --card: 0 0% 100%;
-    --card-foreground: 220 20% 10%;
+    --card-foreground: 0 0% 3.9%;
  
     --popover: 0 0% 100%;
-    --popover-foreground: 220 20% 10%;
+    --popover-foreground: 0 0% 3.9%;
  
-    /* AWS Orange */
-    --primary: 32 100% 50%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
  
-    --secondary: 210 15% 93%;
-    --secondary-foreground: 220 20% 10%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
  
-    --muted: 210 15% 93%;
-    --muted-foreground: 220 10% 45%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
  
-    --accent: 210 15% 93%;
-    --accent-foreground: 220 20% 10%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
  
-    --destructive: 0 72% 51%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
 
-    --success: 142 71% 45%;
-    --success-foreground: 0 0% 100%;
-
-    --border: 220 13% 87%;
-    --input: 220 13% 87%;
-    --ring: 32 100% 50%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
  
     --radius: 0.5rem;
   }
  
   .dark {
-    /* AWS Dark Theme */
-    --background: 220 20% 7%;
-    --foreground: 210 20% 95%;
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
  
-    --card: 220 18% 10%;
-    --card-foreground: 210 20% 95%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
  
-    --popover: 220 18% 10%;
-    --popover-foreground: 210 20% 95%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
  
-    /* AWS Orange */
-    --primary: 32 100% 50%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 47.4% 11.2%;
  
-    --secondary: 220 15% 16%;
-    --secondary-foreground: 210 20% 95%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
  
-    --muted: 220 15% 16%;
-    --muted-foreground: 210 15% 60%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
  
-    --accent: 220 15% 18%;
-    --accent-foreground: 210 20% 95%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
  
-    --destructive: 0 62% 45%;
-    --destructive-foreground: 0 0% 100%;
-
-    --success: 142 71% 45%;
-    --success-foreground: 0 0% 100%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
  
-    --border: 220 15% 20%;
-    --input: 220 15% 20%;
-    --ring: 32 100% 50%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 48%;
   }
 }
  
@@ -85,26 +73,8 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
-}
-
-/* AWS-style card */
-.aws-card {
-  @apply bg-card border border-border rounded-lg;
-}
-
-.aws-card-header {
-  @apply px-6 py-4 border-b border-border flex items-center justify-between;
-}
-
-.aws-card-title {
-  @apply text-lg font-semibold text-foreground;
-}
-
-.aws-card-content {
-  @apply p-6;
 }
 
 /* React Flow custom styling */
@@ -137,18 +107,13 @@
 }
 
 .react-flow__node-contactflow {
-  background: hsl(32 100% 95%);
+  background: hsl(217 91% 95%);
   border: 1px solid hsl(var(--primary));
   color: hsl(var(--primary));
   border-radius: 8px;
   padding: 12px;
   width: 220px;
   font-weight: bold;
-}
-
-.dark .react-flow__node-contactflow {
-  background: hsl(32 50% 12%);
-  color: hsl(var(--primary));
 }
 
 /* Expand button */
@@ -176,7 +141,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
@@ -193,7 +158,7 @@
 .node-modal-content {
   background: hsl(var(--card));
   border: 2px solid hsl(var(--primary));
-  border-radius: 12px;
+  border-radius: 16px;
   padding: 24px;
   width: 90%;
   max-width: 600px;
@@ -225,18 +190,19 @@
 
 .minimize-btn {
   font-size: 13px;
-  background: hsl(var(--muted));
-  color: hsl(var(--foreground));
+  background: hsl(var(--destructive) / 0.1);
+  color: hsl(var(--destructive));
   padding: 8px 16px;
   border-radius: 8px;
-  border: 1px solid hsl(var(--border));
+  border: none;
   cursor: pointer;
   font-weight: 500;
   transition: all 0.2s ease;
 }
 
 .minimize-btn:hover {
-  background: hsl(var(--accent));
+  background: hsl(var(--destructive) / 0.2);
+  transform: scale(1.05);
 }
 
 .node-modal-section {
@@ -291,6 +257,11 @@
   border: 1px solid hsl(var(--border));
 }
 
+.dark .react-flow__node-contactflow {
+  background: hsl(217 50% 15%);
+  color: hsl(var(--primary));
+}
+
 /* Edge styling */
 .react-flow__edge-path {
   stroke: hsl(var(--primary));
@@ -314,11 +285,11 @@
 @keyframes flowPulse {
   0%, 100% {
     stroke-opacity: 0.6;
-    filter: drop-shadow(0 0 2px hsl(var(--primary)));
+    filter: drop-shadow(0 0 2px #f59e0b);
   }
   50% {
     stroke-opacity: 1;
-    filter: drop-shadow(0 0 8px hsl(var(--primary)));
+    filter: drop-shadow(0 0 8px #f59e0b);
   }
 }
 
@@ -337,8 +308,8 @@
 }
 
 .error-count {
-  background-color: hsl(var(--destructive) / 0.15);
-  color: hsl(var(--destructive));
+  background-color: #fee2e2;
+  color: #b91c1c;
   border-radius: 9999px;
   padding: 2px 8px;
   font-size: 12px;
@@ -346,32 +317,23 @@
   align-items: center;
 }
 
+.dark .error-count {
+  background-color: #7f1d1d;
+  color: #fecaca;
+}
+
 /* Controls styling */
 .react-flow__controls {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  border-radius: 8px;
-  border: 1px solid hsl(var(--border));
-  background: hsl(var(--card));
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
 }
 
 .react-flow__controls-button {
-  background: hsl(var(--card));
-  border-bottom: 1px solid hsl(var(--border));
-  fill: hsl(var(--foreground));
-}
-
-.react-flow__controls-button:hover {
-  background: hsl(var(--accent));
+  border-radius: 2px;
 }
 
 /* MiniMap styling */
 .react-flow__minimap {
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  border: 1px solid hsl(var(--border));
-}
-
-/* Status badge */
-.status-active {
-  color: hsl(var(--success));
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
