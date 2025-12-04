@@ -29,9 +29,17 @@ const ModuleNode = ({ data, isConnectable }: ModuleNodeProps) => {
     setFullViewMode(!fullViewMode);
   };
   
-  // Format timestamp if available
-  const formattedTime = data.timestamp ? 
-    new Date(data.timestamp).toLocaleTimeString() : 'Unknown time';
+  // Format timestamp with milliseconds
+  const formatTimestamp = (timestamp: string): string => {
+    const date = new Date(timestamp);
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const seconds = date.getSeconds().toString().padStart(2, '0');
+    const ms = date.getMilliseconds().toString().padStart(3, '0');
+    return `${hours}:${minutes}:${seconds}.${ms}`;
+  };
+  
+  const formattedTime = data.timestamp ? formatTimestamp(data.timestamp) : 'Unknown time';
   
   const hasParameters = Object.keys(data.parameters).length > 0;
   
@@ -95,7 +103,7 @@ const ModuleNode = ({ data, isConnectable }: ModuleNodeProps) => {
             >Click to minimize</span>
           )}
         </div>
-        <div className="text-xs opacity-80">{formattedTime}</div>
+        <div className="text-xs opacity-80 font-mono">{formattedTime}</div>
         
         {hasParameters && (
           <div className="mt-1">

@@ -59,6 +59,16 @@ const ContactFlowNode = ({ data }: NodeProps) => {
   );
 };
 
+const formatTimestamp = (timestamp: string | undefined): string => {
+  if (!timestamp) return 'Unknown time';
+  const date = new Date(timestamp);
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  const seconds = date.getSeconds().toString().padStart(2, '0');
+  const ms = date.getMilliseconds().toString().padStart(3, '0');
+  return `${hours}:${minutes}:${seconds}.${ms}`;
+};
+
 const ModuleNode = ({ data }: NodeProps) => {
   const [expanded, setExpanded] = useState(false);
 
@@ -68,6 +78,7 @@ const ModuleNode = ({ data }: NodeProps) => {
   };
 
   const parameters = data.parameters as Record<string, unknown> | undefined;
+  const timestamp = data.timestamp as string | undefined;
 
   return (
     <div className={`react-flow__node-module ${expanded ? 'expanded' : ''}`}>
@@ -82,6 +93,7 @@ const ModuleNode = ({ data }: NodeProps) => {
             {expanded ? '−' : '+'}
           </button>
         </div>
+        <div className="text-xs text-muted-foreground mt-1 font-mono">{formatTimestamp(timestamp)}</div>
         {parameters && Object.keys(parameters).length > 0 && (
           <>
             <h5 className="font-medium mt-2 text-xs text-muted-foreground">Parameters:</h5>
@@ -124,6 +136,8 @@ const FlowVisualizer = ({ data }: FlowVisualizerProps) => {
       data: {
         label: node.data.label || "Unnamed Module",
         parameters: node.data.parameters || {},
+        timestamp: node.data.timestamp,
+        results: node.data.results,
       },
       position: node.position || { x: 0, y: 0 },
       type: node.type === 'module' ? 'module' : 'contactflow',
