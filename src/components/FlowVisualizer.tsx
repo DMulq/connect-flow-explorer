@@ -94,7 +94,6 @@ const FlowVisualizer = ({ data }: FlowVisualizerProps) => {
   const [nodes, setNodes] = useState<Node[]>([]);
   const [edges, setEdges] = useState<Edge[]>([]);
   const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
-  const [layoutDirection, setLayoutDirection] = useState<'TB' | 'LR'>('TB');
 
   useEffect(() => {
     if (!data || !data.nodes || !data.edges) return;
@@ -120,16 +119,12 @@ const FlowVisualizer = ({ data }: FlowVisualizerProps) => {
     const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
       initialNodes,
       initialEdges,
-      layoutDirection
+      'TB'
     );
 
     setNodes(layoutedNodes);
     setEdges(layoutedEdges);
-  }, [data, layoutDirection]);
-
-  const toggleLayoutDirection = () => {
-    setLayoutDirection(prev => prev === 'TB' ? 'LR' : 'TB');
-  };
+  }, [data]);
 
   const exportAsPng = useCallback(async () => {
     if (!reactFlowInstance) return;
@@ -156,12 +151,6 @@ const FlowVisualizer = ({ data }: FlowVisualizerProps) => {
       <div className="flow-controls mb-4">
         <ContactFlowTable data={data} nodes={nodes} />
         <div className="flex space-x-2 mt-4">
-          <button
-            onClick={toggleLayoutDirection}
-            className="bg-secondary hover:bg-secondary/80 text-secondary-foreground px-4 py-2 rounded-md transition-colors flex items-center space-x-2"
-          >
-            <span>{layoutDirection === 'TB' ? 'Horizontal Layout' : 'Vertical Layout'}</span>
-          </button>
           <button 
             onClick={exportAsPng} 
             className="bg-primary hover:bg-primary/80 text-primary-foreground px-4 py-2 rounded-md transition-colors flex items-center space-x-2"
