@@ -18,8 +18,14 @@ export const processLogData = (entries: LogEntry[]): ParsedLogData => {
   // Track last module per flow to create sequential edges
   const lastModuleByFlow: Record<string, string> = {};
   
+  // Track first module per flow for cross-flow connections
+  const firstModuleByFlow: Record<string, string> = {};
+  
   // Track module count per flow for vertical positioning
   const moduleCountByFlow: Record<string, number> = {};
+  
+  // Track flow order for cross-flow connections
+  const flowOrder: string[] = [];
   
   // Track flow index for horizontal positioning
   let flowIndex = 0;
@@ -44,6 +50,7 @@ export const processLogData = (entries: LogEntry[]): ParsedLogData => {
       // Add flow to the flows map if it's new
       if (!contactFlows.has(flowId)) {
         contactFlows.set(flowId, message.ContactFlowName);
+        flowOrder.push(flowId);
         
         // Store flow's X position
         flowPositions[flowId] = startX + (flowIndex * flowSpacing);
@@ -73,6 +80,11 @@ export const processLogData = (entries: LogEntry[]): ParsedLogData => {
       
       // Create unique module node ID
       const moduleNodeId = `module-${flowId}-${moduleCount}`;
+      
+      // Track first module for this flow
+      if (!firstModuleByFlow[flowId]) {
+        firstModuleByFlow[flowId] = moduleNodeId;
+      }
       
       // Position module directly below its flow
       const moduleX = flowPositions[flowId];
@@ -116,6 +128,30 @@ export const processLogData = (entries: LogEntry[]): ParsedLogData => {
       console.error("Error processing log entry:", error);
     }
   });
+  
+  // Create cross-flow edges (last module of one flow → first module of next flow)
+  for (let i = 0; i < flowOrder.length - 1; i++) {
+    const currentFlowId = flowOrder[i];
+    const nextFlowId = flowOrder[i + 1];
+    
+    const lastModule = lastModuleByFlow[currentFlowId];
+    const firstModule = firstModuleByFlow[nextFlowId];
+    
+    if (lastModule && firstModule) {
+      edges.push({
+        id: `cross-edge-${lastModule}-${firstModule}`,
+        source: lastModule,
+        target: firstModule,
+        animated: true,
+        type: 'smoothstep',
+        style: { 
+          stroke: '#f59e0b',
+          strokeWidth: 3,
+          strokeDasharray: '8 4'
+        }
+      });
+    }
+  }
   
   console.log("Processed into:", nodes.length, "nodes,", edges.length, "edges");
   
