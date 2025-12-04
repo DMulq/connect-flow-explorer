@@ -21,9 +21,6 @@ import '@xyflow/react/dist/style.css';
 import { ParsedLogData } from '@/types/log';
 import ContactFlowTable from './ContactFlowTable';
 
-const dagreGraph = new dagre.graphlib.Graph();
-dagreGraph.setDefaultEdgeLabel(() => ({}));
-
 const nodeWidth = 200;
 const nodeHeight = 50;
 
@@ -32,7 +29,10 @@ const getLayoutedElements = (
   edges: Edge[],
   direction: 'TB' | 'LR' = 'TB'
 ): { nodes: Node[]; edges: Edge[] } => {
-  dagreGraph.setGraph({ rankdir: direction });
+  // Create a fresh graph each time to avoid stale state
+  const dagreGraph = new dagre.graphlib.Graph();
+  dagreGraph.setDefaultEdgeLabel(() => ({}));
+  dagreGraph.setGraph({ rankdir: direction, nodesep: 50, ranksep: 80 });
 
   nodes.forEach((node) => {
     dagreGraph.setNode(node.id, { width: nodeWidth, height: nodeHeight });
@@ -44,22 +44,20 @@ const getLayoutedElements = (
 
   dagre.layout(dagreGraph);
 
-  nodes.forEach((node) => {
+  const layoutedNodes = nodes.map((node) => {
     const nodeWithPosition = dagreGraph.node(node.id);
-    node.targetPosition = direction === 'TB' ? Position.Top : Position.Left;
-    node.sourcePosition = direction === 'TB' ? Position.Bottom : Position.Right;
-
-    // We are shifting the dagre node position (defined center) to the top left
-    // so it matches the React Flow node anchor point
-    node.position = {
-      x: nodeWithPosition.x - nodeWidth / 2,
-      y: nodeWithPosition.y - nodeHeight / 2,
+    return {
+      ...node,
+      targetPosition: direction === 'TB' ? Position.Top : Position.Left,
+      sourcePosition: direction === 'TB' ? Position.Bottom : Position.Right,
+      position: {
+        x: nodeWithPosition.x - nodeWidth / 2,
+        y: nodeWithPosition.y - nodeHeight / 2,
+      },
     };
-
-    return node;
   });
 
-  return { nodes, edges };
+  return { nodes: layoutedNodes, edges };
 };
 
 const ContactFlowNode = ({ data }: NodeProps) => {
@@ -124,11 +122,12 @@ const FlowVisualizer = ({ data }: FlowVisualizerProps) => {
   useEffect(() => {
     if (!data) return;
 
+    // Pass all node data through for proper display
     const initialNodes: Node[] = data.nodes.map((node) => ({
       id: node.id,
       data: {
+        ...node.data,
         label: node.data.label || "Unnamed Module",
-        parameters: node.data.parameters || {},
       },
       position: node.position,
       type: node.type,
@@ -138,6 +137,9 @@ const FlowVisualizer = ({ data }: FlowVisualizerProps) => {
       id: edge.id,
       source: edge.source,
       target: edge.target,
+      animated: edge.animated,
+      type: edge.type,
+      style: edge.style,
     }));
 
     const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
