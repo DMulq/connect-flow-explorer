@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import {
   ReactFlow,
   Controls,
@@ -119,8 +120,8 @@ const ModuleNode = ({ data }: NodeProps) => {
         <Handle type="source" position={Position.Bottom} style={{ visibility: 'hidden' }} />
       </div>
 
-      {/* Modal overlay */}
-      {expanded && (
+      {/* Modal overlay - rendered via portal to escape ReactFlow */}
+      {expanded && createPortal(
         <div className="node-modal-overlay" onClick={toggleExpand}>
           <div className="node-modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="node-modal-header">
@@ -152,7 +153,8 @@ const ModuleNode = ({ data }: NodeProps) => {
               </div>
             )}
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );
