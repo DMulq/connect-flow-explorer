@@ -93,15 +93,13 @@ const ModuleNode = ({ data }: NodeProps) => {
       <div className="react-flow__node-module">
         <Handle type="target" position={Position.Top} style={{ visibility: 'hidden' }} />
         <div className="node-content">
-          <div className="flex justify-between items-start">
-            <h4 className="font-bold text-sm">{String(data.label)}</h4>
-            <button 
-              onClick={toggleExpand} 
-              className="expand-btn"
-            >
-              + Expand
-            </button>
-          </div>
+          <button 
+            onClick={toggleExpand} 
+            className="expand-btn mb-1"
+          >
+            + Expand
+          </button>
+          <h4 className="font-bold text-sm">{String(data.label)}</h4>
           <div className="text-xs text-muted-foreground mt-1 font-mono">{formatTimestamp(timestamp)}</div>
           {parameters && Object.keys(parameters).length > 0 && (
             <>
