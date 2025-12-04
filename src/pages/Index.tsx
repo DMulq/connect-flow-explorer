@@ -88,6 +88,10 @@ const Index = () => {
               
               <FileUploader onDataParsed={handleParsedData} isLoading={isLoading} />
               
+              <p className="mt-4 text-xs text-muted-foreground text-center">
+                🔒 Your data is processed locally in your browser. We do not store or transmit your log files.
+              </p>
+              
               {error && (
                 <div className="mt-4 p-3 bg-destructive/20 border border-destructive text-destructive rounded-md">
                   {error}
