@@ -18,8 +18,11 @@ import { saveAs } from 'file-saver';
 import { toPng } from 'html-to-image';
 
 import '@xyflow/react/dist/style.css';
-import { ParsedLogData } from '@/types/log';
+import { ParsedLogData, ContactFlowModule } from '@/types/log';
 import ContactFlowTable from './ContactFlowTable';
+
+const dagreGraph = new dagre.graphlib.Graph();
+dagreGraph.setDefaultEdgeLabel(() => ({}));
 
 const nodeWidth = 200;
 const nodeHeight = 50;
@@ -29,10 +32,7 @@ const getLayoutedElements = (
   edges: Edge[],
   direction: 'TB' | 'LR' = 'TB'
 ): { nodes: Node[]; edges: Edge[] } => {
-  // Create a fresh graph each time to avoid stale state
-  const dagreGraph = new dagre.graphlib.Graph();
-  dagreGraph.setDefaultEdgeLabel(() => ({}));
-  dagreGraph.setGraph({ rankdir: direction, nodesep: 50, ranksep: 80 });
+  dagreGraph.setGraph({ rankdir: direction });
 
   nodes.forEach((node) => {
     dagreGraph.setNode(node.id, { width: nodeWidth, height: nodeHeight });
@@ -44,26 +44,28 @@ const getLayoutedElements = (
 
   dagre.layout(dagreGraph);
 
-  const layoutedNodes = nodes.map((node) => {
+  nodes.forEach((node) => {
     const nodeWithPosition = dagreGraph.node(node.id);
-    return {
-      ...node,
-      targetPosition: direction === 'TB' ? Position.Top : Position.Left,
-      sourcePosition: direction === 'TB' ? Position.Bottom : Position.Right,
-      position: {
-        x: nodeWithPosition.x - nodeWidth / 2,
-        y: nodeWithPosition.y - nodeHeight / 2,
-      },
+    node.targetPosition = direction === 'TB' ? Position.Top : Position.Left;
+    node.sourcePosition = direction === 'TB' ? Position.Bottom : Position.Right;
+
+    // We are shifting the dagre node position (defined center) to the top left
+    // so it matches the React Flow node anchor point
+    node.position = {
+      x: nodeWithPosition.x - nodeWidth / 2,
+      y: nodeWithPosition.y - nodeHeight / 2,
     };
+
+    return node;
   });
 
-  return { nodes: layoutedNodes, edges };
+  return { nodes, edges };
 };
 
 const ContactFlowNode = ({ data }: NodeProps) => {
   return (
     <div className="react-flow__node-contactflow">
-      <div>{String(data.label)}</div>
+      <div>{data.label}</div>
     </div>
   );
 };
@@ -75,24 +77,22 @@ const ModuleNode = ({ data }: NodeProps) => {
     setExpanded(!expanded);
   };
 
-  const parameters = data.parameters as Record<string, unknown> | undefined;
-  
   return (
     <div className="react-flow__node-module">
       <div className={`node-content ${expanded ? 'expanded-node' : ''}`}>
-        <h4 className="font-bold">{String(data.label)}</h4>
-        {parameters && Object.keys(parameters).length > 0 && (
+        <h4 className="font-bold">{data.label}</h4>
+        {data.parameters && Object.keys(data.parameters).length > 0 && (
           <>
             <h5 className="font-medium mt-2">Parameters:</h5>
             <div className={`parameter-list ${expanded ? 'expanded-parameter-list' : ''}`}>
-              {Object.entries(parameters).map(([key, value]) => (
+              {Object.entries(data.parameters).map(([key, value]) => (
                 <div key={key} className="parameter-item">
                   <span className="font-medium">{key}:</span>
                   <span>{String(value)}</span>
                 </div>
               ))}
             </div>
-            {Object.keys(parameters).length > 3 && (
+            {Object.keys(data.parameters).length > 3 && (
               <button onClick={toggleExpand} className="mt-2 text-sm">
                 {expanded ? 'Collapse' : 'Expand'}
               </button>
@@ -122,24 +122,20 @@ const FlowVisualizer = ({ data }: FlowVisualizerProps) => {
   useEffect(() => {
     if (!data) return;
 
-    // Pass all node data through for proper display
-    const initialNodes: Node[] = data.nodes.map((node) => ({
-      id: node.id,
+    const initialNodes: Node[] = data.modules.map((module) => ({
+      id: module.id,
       data: {
-        ...node.data,
-        label: node.data.label || "Unnamed Module",
+        label: module.name || "Unnamed Module",
+        parameters: module.parameters || {},
       },
-      position: node.position,
-      type: node.type,
+      position: { x: 0, y: 0 },
+      type: module.type === 'ContactFlowModule' ? 'module' : 'contactflow',
     }));
 
-    const initialEdges: Edge[] = data.edges.map((edge) => ({
-      id: edge.id,
-      source: edge.source,
-      target: edge.target,
-      animated: edge.animated,
-      type: edge.type,
-      style: edge.style,
+    const initialEdges: Edge[] = data.connections.map((connection) => ({
+      id: `e-${connection.source}-${connection.target}`,
+      source: connection.source,
+      target: connection.target,
     }));
 
     const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
