@@ -101,7 +101,6 @@
   border-radius: 6px;
   padding: 8px;
   width: 200px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .react-flow__node-contactflow {
@@ -112,7 +111,23 @@
   padding: 8px;
   width: 200px;
   font-weight: bold;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Edge styling */
+.react-flow__edge-path {
+  stroke: hsl(var(--primary));
+  stroke-width: 2;
+}
+
+.react-flow__edge.animated path {
+  stroke-dasharray: 5;
+  animation: dashdraw 0.5s linear infinite;
+}
+
+@keyframes dashdraw {
+  from {
+    stroke-dashoffset: 10;
+  }
 }
 
 .dark .react-flow__node-module {
