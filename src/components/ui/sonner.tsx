@@ -13,14 +13,17 @@ const Toaster = ({ ...props }: ToasterProps) => {
       className="toaster group"
       position="top-right"
       toastOptions={{
+        unstyled: true,
         classNames: {
           toast:
-            "group toast group-[.toaster]:bg-emerald-50 group-[.toaster]:text-emerald-900 group-[.toaster]:border-emerald-200 group-[.toaster]:shadow-lg dark:group-[.toaster]:bg-emerald-950 dark:group-[.toaster]:text-emerald-100 dark:group-[.toaster]:border-emerald-800",
-          description: "group-[.toast]:text-emerald-700 dark:group-[.toast]:text-emerald-300",
+            "flex items-center gap-3 w-full p-4 rounded-lg border shadow-lg bg-emerald-50 text-emerald-900 border-emerald-300",
+          title: "font-medium text-emerald-900",
+          description: "text-emerald-700 text-sm",
           actionButton:
-            "group-[.toast]:bg-emerald-600 group-[.toast]:text-white hover:group-[.toast]:bg-emerald-700",
+            "bg-emerald-600 text-white px-3 py-1 rounded text-sm hover:bg-emerald-700",
           cancelButton:
-            "group-[.toast]:bg-emerald-100 group-[.toast]:text-emerald-800 dark:group-[.toast]:bg-emerald-900 dark:group-[.toast]:text-emerald-200",
+            "bg-emerald-100 text-emerald-800 px-3 py-1 rounded text-sm",
+          closeButton: "text-emerald-600 hover:text-emerald-800",
         },
       }}
       {...props}
