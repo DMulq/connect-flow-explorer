@@ -11,7 +11,6 @@ import {
   ReactFlowInstance,
   Position
 } from '@xyflow/react';
-import dagre from '@dagrejs/dagre';
 import { saveAs } from 'file-saver';
 import { toPng } from 'html-to-image';
 
@@ -22,38 +21,17 @@ import ContactFlowTable from './ContactFlowTable';
 const nodeWidth = 200;
 const nodeHeight = 50;
 
+// Use positions from data directly, just add source/target positions for handles
 const getLayoutedElements = (
   nodes: Node[],
   edges: Edge[],
   direction: 'TB' | 'LR' = 'TB'
 ): { nodes: Node[]; edges: Edge[] } => {
-  // Create a new graph instance each time to avoid stale node positions
-  const dagreGraph = new dagre.graphlib.Graph();
-  dagreGraph.setDefaultEdgeLabel(() => ({}));
-  dagreGraph.setGraph({ rankdir: direction, nodesep: 50, ranksep: 80 });
-
-  nodes.forEach((node) => {
-    dagreGraph.setNode(node.id, { width: nodeWidth, height: nodeHeight });
-  });
-
-  edges.forEach((edge) => {
-    dagreGraph.setEdge(edge.source, edge.target);
-  });
-
-  dagre.layout(dagreGraph);
-
-  const layoutedNodes = nodes.map((node) => {
-    const nodeWithPosition = dagreGraph.node(node.id);
-    return {
-      ...node,
-      targetPosition: direction === 'TB' ? Position.Top : Position.Left,
-      sourcePosition: direction === 'TB' ? Position.Bottom : Position.Right,
-      position: {
-        x: nodeWithPosition.x - nodeWidth / 2,
-        y: nodeWithPosition.y - nodeHeight / 2,
-      },
-    };
-  });
+  const layoutedNodes = nodes.map((node) => ({
+    ...node,
+    targetPosition: direction === 'TB' ? Position.Top : Position.Left,
+    sourcePosition: direction === 'TB' ? Position.Bottom : Position.Right,
+  }));
 
   return { nodes: layoutedNodes, edges };
 };
