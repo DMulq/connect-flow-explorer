@@ -105,7 +105,7 @@ const FlowVisualizer = ({ data }: FlowVisualizerProps) => {
         label: node.data.label || "Unnamed Module",
         parameters: node.data.parameters || {},
       },
-      position: { x: 0, y: 0 },
+      position: node.position || { x: 0, y: 0 },
       type: node.type === 'module' ? 'module' : 'contactflow',
     }));
 
@@ -113,6 +113,8 @@ const FlowVisualizer = ({ data }: FlowVisualizerProps) => {
       id: edge.id,
       source: edge.source,
       target: edge.target,
+      type: edge.type || 'smoothstep',
+      style: edge.style,
     }));
 
     const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
