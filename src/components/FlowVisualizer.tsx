@@ -18,7 +18,7 @@ import { saveAs } from 'file-saver';
 import { toPng } from 'html-to-image';
 
 import '@xyflow/react/dist/style.css';
-import { ParsedLogData, ContactFlowModule } from '@/types/log';
+import { ParsedLogData } from '@/types/log';
 import ContactFlowTable from './ContactFlowTable';
 
 const dagreGraph = new dagre.graphlib.Graph();
@@ -65,7 +65,7 @@ const getLayoutedElements = (
 const ContactFlowNode = ({ data }: NodeProps) => {
   return (
     <div className="react-flow__node-contactflow">
-      <div>{data.label}</div>
+      <div>{String(data.label)}</div>
     </div>
   );
 };
@@ -77,22 +77,24 @@ const ModuleNode = ({ data }: NodeProps) => {
     setExpanded(!expanded);
   };
 
+  const parameters = data.parameters as Record<string, unknown> | undefined;
+  
   return (
     <div className="react-flow__node-module">
       <div className={`node-content ${expanded ? 'expanded-node' : ''}`}>
-        <h4 className="font-bold">{data.label}</h4>
-        {data.parameters && Object.keys(data.parameters).length > 0 && (
+        <h4 className="font-bold">{String(data.label)}</h4>
+        {parameters && Object.keys(parameters).length > 0 && (
           <>
             <h5 className="font-medium mt-2">Parameters:</h5>
             <div className={`parameter-list ${expanded ? 'expanded-parameter-list' : ''}`}>
-              {Object.entries(data.parameters).map(([key, value]) => (
+              {Object.entries(parameters).map(([key, value]) => (
                 <div key={key} className="parameter-item">
                   <span className="font-medium">{key}:</span>
                   <span>{String(value)}</span>
                 </div>
               ))}
             </div>
-            {Object.keys(data.parameters).length > 3 && (
+            {Object.keys(parameters).length > 3 && (
               <button onClick={toggleExpand} className="mt-2 text-sm">
                 {expanded ? 'Collapse' : 'Expand'}
               </button>
@@ -122,20 +124,20 @@ const FlowVisualizer = ({ data }: FlowVisualizerProps) => {
   useEffect(() => {
     if (!data) return;
 
-    const initialNodes: Node[] = data.modules.map((module) => ({
-      id: module.id,
+    const initialNodes: Node[] = data.nodes.map((node) => ({
+      id: node.id,
       data: {
-        label: module.name || "Unnamed Module",
-        parameters: module.parameters || {},
+        label: node.data.label || "Unnamed Module",
+        parameters: node.data.parameters || {},
       },
-      position: { x: 0, y: 0 },
-      type: module.type === 'ContactFlowModule' ? 'module' : 'contactflow',
+      position: node.position,
+      type: node.type,
     }));
 
-    const initialEdges: Edge[] = data.connections.map((connection) => ({
-      id: `e-${connection.source}-${connection.target}`,
-      source: connection.source,
-      target: connection.target,
+    const initialEdges: Edge[] = data.edges.map((edge) => ({
+      id: edge.id,
+      source: edge.source,
+      target: edge.target,
     }));
 
     const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
