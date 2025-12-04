@@ -171,6 +171,10 @@ const FlowVisualizer = ({ data }: FlowVisualizerProps) => {
             maxZoom={1.5}
             defaultViewport={{ x: 0, y: 0, zoom: 0.5 }}
             onInit={(instance) => setReactFlowInstance(instance as ReactFlowInstance)}
+            defaultEdgeOptions={{
+              type: 'smoothstep',
+              style: { stroke: '#3b82f6', strokeWidth: 2 },
+            }}
           >
             <Controls />
             <MiniMap zoomable pannable nodeClassName={(node) => `node-${node.type}`} />
