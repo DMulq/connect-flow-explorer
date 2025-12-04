@@ -39,7 +39,7 @@ const Index = () => {
     <div className="h-screen flex flex-col bg-background">
       {/* Header */}
       <header className="border-b border-border">
-        <div className="container mx-auto py-4 flex justify-between items-center">
+        <div className="py-4 px-4 flex justify-between items-center">
           <div className="flex items-center gap-3">
             <img 
               src="/lovable-uploads/8c1aa2ff-dadc-4c73-9857-da2c7492c6b3.png" 
@@ -75,7 +75,7 @@ const Index = () => {
       </header>
 
       {/* Main content */}
-      <main className="flex-1 container mx-auto py-6 px-4 md:px-0 flex flex-col">
+      <main className="flex-1 py-6 px-4 flex flex-col">
         {!parsedData ? (
           <div className="flex-1 flex flex-col items-center justify-center">
             <div className="max-w-md w-full">
@@ -118,7 +118,7 @@ const Index = () => {
 
       {/* Footer */}
       <footer className="border-t border-border py-4">
-        <div className="container mx-auto text-center text-muted-foreground text-sm">
+        <div className="px-4 text-center text-muted-foreground text-sm">
           <div className="flex items-center justify-center gap-2">
             <img 
               src="/lovable-uploads/8c1aa2ff-dadc-4c73-9857-da2c7492c6b3.png" 
