@@ -9,7 +9,9 @@ import {
   Edge,
   NodeProps,
   ReactFlowInstance,
-  Position
+  Position,
+  Handle,
+  MarkerType
 } from '@xyflow/react';
 import { saveAs } from 'file-saver';
 import { toPng } from 'html-to-image';
@@ -33,13 +35,26 @@ const getLayoutedElements = (
     sourcePosition: direction === 'TB' ? Position.Bottom : Position.Right,
   }));
 
-  return { nodes: layoutedNodes, edges };
+  // Add arrow markers to edges
+  const layoutedEdges = edges.map((edge) => ({
+    ...edge,
+    markerEnd: {
+      type: MarkerType.ArrowClosed,
+      width: 20,
+      height: 20,
+      color: '#3b82f6',
+    },
+  }));
+
+  return { nodes: layoutedNodes, edges: layoutedEdges };
 };
 
 const ContactFlowNode = ({ data }: NodeProps) => {
   return (
     <div className="react-flow__node-contactflow">
+      <Handle type="target" position={Position.Top} style={{ visibility: 'hidden' }} />
       <div>{String(data.label)}</div>
+      <Handle type="source" position={Position.Bottom} style={{ visibility: 'hidden' }} />
     </div>
   );
 };
@@ -47,35 +62,41 @@ const ContactFlowNode = ({ data }: NodeProps) => {
 const ModuleNode = ({ data }: NodeProps) => {
   const [expanded, setExpanded] = useState(false);
 
-  const toggleExpand = () => {
+  const toggleExpand = (e: React.MouseEvent) => {
+    e.stopPropagation();
     setExpanded(!expanded);
   };
 
   const parameters = data.parameters as Record<string, unknown> | undefined;
 
   return (
-    <div className="react-flow__node-module">
-      <div className={`node-content ${expanded ? 'expanded-node' : ''}`}>
-        <h4 className="font-bold">{String(data.label)}</h4>
+    <div className={`react-flow__node-module ${expanded ? 'expanded' : ''}`}>
+      <Handle type="target" position={Position.Top} style={{ visibility: 'hidden' }} />
+      <div className="node-content">
+        <div className="flex justify-between items-start">
+          <h4 className="font-bold text-sm">{String(data.label)}</h4>
+          <button 
+            onClick={toggleExpand} 
+            className="text-xs bg-primary/10 hover:bg-primary/20 text-primary px-2 py-1 rounded ml-2"
+          >
+            {expanded ? '−' : '+'}
+          </button>
+        </div>
         {parameters && Object.keys(parameters).length > 0 && (
           <>
-            <h5 className="font-medium mt-2">Parameters:</h5>
+            <h5 className="font-medium mt-2 text-xs text-muted-foreground">Parameters:</h5>
             <div className={`parameter-list ${expanded ? 'expanded-parameter-list' : ''}`}>
               {Object.entries(parameters).map(([key, value]) => (
                 <div key={key} className="parameter-item">
                   <span className="font-medium">{key}:</span>
-                  <span>{String(value)}</span>
+                  <span className="break-all">{String(value)}</span>
                 </div>
               ))}
             </div>
-            {Object.keys(parameters).length > 3 && (
-              <button onClick={toggleExpand} className="mt-2 text-sm">
-                {expanded ? 'Collapse' : 'Expand'}
-              </button>
-            )}
           </>
         )}
       </div>
+      <Handle type="source" position={Position.Bottom} style={{ visibility: 'hidden' }} />
     </div>
   );
 };
