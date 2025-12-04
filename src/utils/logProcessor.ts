@@ -26,11 +26,11 @@ export const processLogData = (entries: LogEntry[]): ParsedLogData => {
   const flowPositions: Record<string, number> = {};
   
   // Layout constants
-  const flowSpacing = 300;
-  const moduleSpacing = 100;
+  const flowSpacing = 350;
+  const moduleSpacing = 180;
   const startX = 100;
   const flowY = 50;
-  const moduleStartY = 150;
+  const moduleStartY = 180;
   
   // Process each log entry to create nodes and edges
   sortedEntries.forEach((entry) => {
