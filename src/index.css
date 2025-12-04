@@ -96,29 +96,155 @@
 
 /* Node styling */
 .react-flow__node-module {
-  background: white;
-  border: 1px solid #e2e8f0;
-  border-radius: 6px;
-  padding: 10px;
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: 8px;
+  padding: 12px;
   width: 220px;
-  max-height: 150px;
+  max-height: 160px;
   overflow: hidden;
-  transition: max-height 0.3s ease;
-}
-
-.react-flow__node-module.expanded {
-  max-height: none;
-  width: 300px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .react-flow__node-contactflow {
-  background: #ebf5ff;
-  border: 1px solid #93c5fd;
-  color: #1e40af;
-  border-radius: 6px;
-  padding: 10px;
+  background: hsl(217 91% 95%);
+  border: 1px solid hsl(var(--primary));
+  color: hsl(var(--primary));
+  border-radius: 8px;
+  padding: 12px;
   width: 220px;
   font-weight: bold;
+}
+
+/* Expand button */
+.expand-btn {
+  font-size: 11px;
+  background: hsl(var(--primary) / 0.1);
+  color: hsl(var(--primary));
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.expand-btn:hover {
+  background: hsl(var(--primary) / 0.2);
+  transform: scale(1.05);
+}
+
+/* Expanded node overlay */
+.module-node-expanded {
+  background: hsl(var(--card));
+  border: 2px solid hsl(var(--primary));
+  border-radius: 12px;
+  padding: 20px;
+  width: 450px;
+  max-height: 500px;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25), 0 0 0 4px hsl(var(--primary) / 0.1);
+  z-index: 1000;
+  animation: expandIn 0.3s ease-out;
+}
+
+@keyframes expandIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.expanded-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid hsl(var(--border));
+}
+
+.minimize-btn {
+  font-size: 12px;
+  background: hsl(var(--destructive) / 0.1);
+  color: hsl(var(--destructive));
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.minimize-btn:hover {
+  background: hsl(var(--destructive) / 0.2);
+  transform: scale(1.05);
+}
+
+.expanded-section {
+  background: hsl(var(--muted) / 0.5);
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.expanded-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.expanded-param-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.param-key {
+  font-weight: 600;
+  font-size: 12px;
+  color: hsl(var(--primary));
+}
+
+.param-value {
+  font-family: ui-monospace, monospace;
+  font-size: 11px;
+  background: hsl(var(--background));
+  padding: 8px;
+  border-radius: 4px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+  margin: 0;
+  border: 1px solid hsl(var(--border));
+}
+
+.expanded-results {
+  font-family: ui-monospace, monospace;
+  font-size: 11px;
+  background: hsl(var(--background));
+  padding: 12px;
+  border-radius: 6px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+  margin: 0;
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid hsl(var(--border));
+}
+
+/* Dark mode expanded node */
+.dark .module-node-expanded {
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 0 4px hsl(var(--primary) / 0.2);
+}
+
+.dark .react-flow__node-contactflow {
+  background: hsl(217 50% 15%);
+  color: hsl(var(--primary));
 }
 
 /* Edge styling */
@@ -152,28 +278,11 @@
   }
 }
 
-.dark .react-flow__node-module {
-  background: #1e293b;
-  border-color: #475569;
-  color: #f8fafc;
-}
-
-.dark .react-flow__node-contactflow {
-  background: #172554;
-  border-color: #3b82f6;
-  color: #e0f2fe;
-}
-
 /* Parameter list styling */
 .parameter-list {
-  max-height: 60px;
+  max-height: 50px;
   overflow: hidden;
   margin-top: 4px;
-}
-
-.expanded-parameter-list {
-  max-height: none;
-  overflow: visible;
 }
 
 .parameter-item {
@@ -181,7 +290,6 @@
   margin-top: 4px;
   font-size: 11px;
   gap: 4px;
-  flex-wrap: wrap;
 }
 
 .error-count {
