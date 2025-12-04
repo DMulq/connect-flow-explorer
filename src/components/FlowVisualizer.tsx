@@ -87,76 +87,74 @@ const ModuleNode = ({ data }: NodeProps) => {
     return String(value);
   };
 
-  if (expanded) {
-    return (
-      <div className="module-node-expanded">
+  return (
+    <>
+      <div className="react-flow__node-module">
         <Handle type="target" position={Position.Top} style={{ visibility: 'hidden' }} />
-        <div className="expanded-header">
-          <h3 className="font-bold text-lg">{String(data.label)}</h3>
-          <button 
-            onClick={toggleExpand} 
-            className="minimize-btn"
-          >
-            ✕ Minimize
-          </button>
+        <div className="node-content">
+          <div className="flex justify-between items-start">
+            <h4 className="font-bold text-sm">{String(data.label)}</h4>
+            <button 
+              onClick={toggleExpand} 
+              className="expand-btn"
+            >
+              + Expand
+            </button>
+          </div>
+          <div className="text-xs text-muted-foreground mt-1 font-mono">{formatTimestamp(timestamp)}</div>
+          {parameters && Object.keys(parameters).length > 0 && (
+            <>
+              <h5 className="font-medium mt-2 text-xs text-muted-foreground">Parameters:</h5>
+              <div className="parameter-list">
+                {Object.entries(parameters).map(([key, value]) => (
+                  <div key={key} className="parameter-item">
+                    <span className="font-medium">{key}:</span>
+                    <span className="truncate">{formatValue(value).substring(0, 50)}{formatValue(value).length > 50 ? '...' : ''}</span>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
         </div>
-        <div className="text-sm text-muted-foreground font-mono mb-3">{formatTimestamp(timestamp)}</div>
-        
-        {parameters && Object.keys(parameters).length > 0 && (
-          <div className="expanded-section">
-            <h4 className="font-semibold text-sm mb-2 text-primary">Parameters</h4>
-            <div className="expanded-content">
-              {Object.entries(parameters).map(([key, value]) => (
-                <div key={key} className="expanded-param-item">
-                  <span className="param-key">{key}:</span>
-                  <pre className="param-value">{formatValue(value)}</pre>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-        
-        {results && (
-          <div className="expanded-section mt-3">
-            <h4 className="font-semibold text-sm mb-2 text-primary">Results</h4>
-            <pre className="expanded-results">{formatValue(results)}</pre>
-          </div>
-        )}
         <Handle type="source" position={Position.Bottom} style={{ visibility: 'hidden' }} />
       </div>
-    );
-  }
 
-  return (
-    <div className="react-flow__node-module">
-      <Handle type="target" position={Position.Top} style={{ visibility: 'hidden' }} />
-      <div className="node-content">
-        <div className="flex justify-between items-start">
-          <h4 className="font-bold text-sm">{String(data.label)}</h4>
-          <button 
-            onClick={toggleExpand} 
-            className="expand-btn"
-          >
-            + Expand
-          </button>
-        </div>
-        <div className="text-xs text-muted-foreground mt-1 font-mono">{formatTimestamp(timestamp)}</div>
-        {parameters && Object.keys(parameters).length > 0 && (
-          <>
-            <h5 className="font-medium mt-2 text-xs text-muted-foreground">Parameters:</h5>
-            <div className="parameter-list">
-              {Object.entries(parameters).map(([key, value]) => (
-                <div key={key} className="parameter-item">
-                  <span className="font-medium">{key}:</span>
-                  <span className="truncate">{formatValue(value).substring(0, 50)}{formatValue(value).length > 50 ? '...' : ''}</span>
-                </div>
-              ))}
+      {/* Modal overlay */}
+      {expanded && (
+        <div className="node-modal-overlay" onClick={toggleExpand}>
+          <div className="node-modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="node-modal-header">
+              <h3 className="font-bold text-xl">{String(data.label)}</h3>
+              <button onClick={toggleExpand} className="minimize-btn">
+                ✕ Close
+              </button>
             </div>
-          </>
-        )}
-      </div>
-      <Handle type="source" position={Position.Bottom} style={{ visibility: 'hidden' }} />
-    </div>
+            <div className="text-sm text-muted-foreground font-mono mb-4">{formatTimestamp(timestamp)}</div>
+            
+            {parameters && Object.keys(parameters).length > 0 && (
+              <div className="node-modal-section">
+                <h4 className="font-semibold text-sm mb-3 text-primary">Parameters</h4>
+                <div className="node-modal-params">
+                  {Object.entries(parameters).map(([key, value]) => (
+                    <div key={key} className="node-modal-param-item">
+                      <span className="param-key">{key}:</span>
+                      <pre className="param-value">{formatValue(value)}</pre>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            
+            {results && (
+              <div className="node-modal-section mt-4">
+                <h4 className="font-semibold text-sm mb-3 text-primary">Results</h4>
+                <pre className="node-modal-results">{formatValue(results)}</pre>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

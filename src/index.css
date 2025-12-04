@@ -134,46 +134,66 @@
   transform: scale(1.05);
 }
 
-/* Expanded node overlay */
-.module-node-expanded {
-  background: hsl(var(--card));
-  border: 2px solid hsl(var(--primary));
-  border-radius: 12px;
-  padding: 20px;
-  width: 450px;
-  max-height: 500px;
-  overflow-y: auto;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25), 0 0 0 4px hsl(var(--primary) / 0.1);
-  z-index: 1000;
-  animation: expandIn 0.3s ease-out;
+/* Modal overlay - fixed position to escape ReactFlow */
+.node-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.2s ease-out;
 }
 
-@keyframes expandIn {
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.node-modal-content {
+  background: hsl(var(--card));
+  border: 2px solid hsl(var(--primary));
+  border-radius: 16px;
+  padding: 24px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4);
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
   from {
     opacity: 0;
-    transform: scale(0.9);
+    transform: scale(0.9) translateY(20px);
   }
   to {
     opacity: 1;
-    transform: scale(1);
+    transform: scale(1) translateY(0);
   }
 }
 
-.expanded-header {
+.node-modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
-  padding-bottom: 12px;
+  margin-bottom: 12px;
+  padding-bottom: 16px;
   border-bottom: 1px solid hsl(var(--border));
 }
 
 .minimize-btn {
-  font-size: 12px;
+  font-size: 13px;
   background: hsl(var(--destructive) / 0.1);
   color: hsl(var(--destructive));
-  padding: 6px 12px;
-  border-radius: 6px;
+  padding: 8px 16px;
+  border-radius: 8px;
   border: none;
   cursor: pointer;
   font-weight: 500;
@@ -185,61 +205,56 @@
   transform: scale(1.05);
 }
 
-.expanded-section {
+.node-modal-section {
   background: hsl(var(--muted) / 0.5);
-  border-radius: 8px;
-  padding: 12px;
+  border-radius: 12px;
+  padding: 16px;
 }
 
-.expanded-content {
+.node-modal-params {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
 }
 
-.expanded-param-item {
+.node-modal-param-item {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
 }
 
 .param-key {
   font-weight: 600;
-  font-size: 12px;
+  font-size: 13px;
   color: hsl(var(--primary));
 }
 
 .param-value {
   font-family: ui-monospace, monospace;
-  font-size: 11px;
-  background: hsl(var(--background));
-  padding: 8px;
-  border-radius: 4px;
-  overflow-x: auto;
-  white-space: pre-wrap;
-  word-break: break-all;
-  margin: 0;
-  border: 1px solid hsl(var(--border));
-}
-
-.expanded-results {
-  font-family: ui-monospace, monospace;
-  font-size: 11px;
+  font-size: 12px;
   background: hsl(var(--background));
   padding: 12px;
-  border-radius: 6px;
+  border-radius: 8px;
   overflow-x: auto;
   white-space: pre-wrap;
   word-break: break-all;
   margin: 0;
-  max-height: 200px;
-  overflow-y: auto;
   border: 1px solid hsl(var(--border));
 }
 
-/* Dark mode expanded node */
-.dark .module-node-expanded {
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 0 4px hsl(var(--primary) / 0.2);
+.node-modal-results {
+  font-family: ui-monospace, monospace;
+  font-size: 12px;
+  background: hsl(var(--background));
+  padding: 16px;
+  border-radius: 8px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+  margin: 0;
+  max-height: 250px;
+  overflow-y: auto;
+  border: 1px solid hsl(var(--border));
 }
 
 .dark .react-flow__node-contactflow {
