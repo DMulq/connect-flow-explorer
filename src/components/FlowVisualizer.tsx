@@ -19,9 +19,6 @@ import '@xyflow/react/dist/style.css';
 import { ParsedLogData } from '@/types/log';
 import ContactFlowTable from './ContactFlowTable';
 
-const dagreGraph = new dagre.graphlib.Graph();
-dagreGraph.setDefaultEdgeLabel(() => ({}));
-
 const nodeWidth = 200;
 const nodeHeight = 50;
 
@@ -30,7 +27,10 @@ const getLayoutedElements = (
   edges: Edge[],
   direction: 'TB' | 'LR' = 'TB'
 ): { nodes: Node[]; edges: Edge[] } => {
-  dagreGraph.setGraph({ rankdir: direction });
+  // Create a new graph instance each time to avoid stale node positions
+  const dagreGraph = new dagre.graphlib.Graph();
+  dagreGraph.setDefaultEdgeLabel(() => ({}));
+  dagreGraph.setGraph({ rankdir: direction, nodesep: 50, ranksep: 80 });
 
   nodes.forEach((node) => {
     dagreGraph.setNode(node.id, { width: nodeWidth, height: nodeHeight });
@@ -42,22 +42,20 @@ const getLayoutedElements = (
 
   dagre.layout(dagreGraph);
 
-  nodes.forEach((node) => {
+  const layoutedNodes = nodes.map((node) => {
     const nodeWithPosition = dagreGraph.node(node.id);
-    node.targetPosition = direction === 'TB' ? Position.Top : Position.Left;
-    node.sourcePosition = direction === 'TB' ? Position.Bottom : Position.Right;
-
-    // We are shifting the dagre node position (defined center) to the top left
-    // so it matches the React Flow node anchor point
-    node.position = {
-      x: nodeWithPosition.x - nodeWidth / 2,
-      y: nodeWithPosition.y - nodeHeight / 2,
+    return {
+      ...node,
+      targetPosition: direction === 'TB' ? Position.Top : Position.Left,
+      sourcePosition: direction === 'TB' ? Position.Bottom : Position.Right,
+      position: {
+        x: nodeWithPosition.x - nodeWidth / 2,
+        y: nodeWithPosition.y - nodeHeight / 2,
+      },
     };
-
-    return node;
   });
 
-  return { nodes, edges };
+  return { nodes: layoutedNodes, edges };
 };
 
 const ContactFlowNode = ({ data }: NodeProps) => {
@@ -175,9 +173,9 @@ const FlowVisualizer = ({ data }: FlowVisualizerProps) => {
 
   return (
     <div className="flow-container">
-      <div className="flow-controls flex justify-between items-center">
+      <div className="flow-controls mb-4">
         <ContactFlowTable data={data} nodes={nodes} />
-        <div className="flex space-x-2">
+        <div className="flex space-x-2 mt-4">
           <button
             onClick={toggleLayoutDirection}
             className="bg-secondary hover:bg-secondary/80 text-secondary-foreground px-4 py-2 rounded-md transition-colors flex items-center space-x-2"
@@ -194,7 +192,7 @@ const FlowVisualizer = ({ data }: FlowVisualizerProps) => {
       </div>
       
       <div className="flow-wrapper bg-background border border-border rounded-md overflow-hidden" style={{ height: '70vh' }}>
-        {nodes.length > 0 && edges.length > 0 ? (
+        {nodes.length > 0 || edges.length > 0 ? (
           <ReactFlow
             nodes={nodes}
             edges={edges}
