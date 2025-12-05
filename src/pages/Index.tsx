@@ -46,7 +46,7 @@ const Index = () => {
               alt="Contact Flow Logo" 
               className="h-8 w-8"
             />
-            <h1 className="text-xl font-bold">Contact Flow Log Analyser</h1>
+            <h1 className="text-xl font-bold">CloudWatch Amazon Connect Log Explorer</h1>
           </div>
           
           {!parsedData && (
@@ -129,7 +129,7 @@ const Index = () => {
               alt="Contact Flow Logo" 
               className="h-5 w-5"
             />
-            <p>Contact Flow Log Analyser</p>
+            <p>CloudWatch Amazon Connect Log Explorer</p>
           </div>
         </div>
       </footer>
