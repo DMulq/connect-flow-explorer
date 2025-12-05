@@ -82,7 +82,7 @@ const Index = () => {
               <div className="text-center mb-6">
                 <h2 className="text-2xl font-bold mb-2">Upload Log File</h2>
                 <p className="text-muted-foreground">
-                  Upload your AWS Connect log file (CSV format) to visualize the contact flow
+                  Upload your CloudWatch Amazon Connect log file (CSV format) to visualise the contact flow
                 </p>
               </div>
               
